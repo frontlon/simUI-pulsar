@@ -1,0 +1,114 @@
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+    border-radius: 50%;
+    background: var(--color-1);
+    color: #FFF;
+    z-index: 3;
+}
+
+
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* 平台栏 */
+.platform-scroll-area{
+    width: 100%;
+    height: 100%;
+}
+
+.platform-list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.platform-item {
+    width: 200px;
+    height: 80vh;
+    display: block;
+    text-align: center;
+    margin-top: 10vh;
+    padding: 0;
+    position: relative;
+}
+
+.platform-ico-active {
+    animation: zoomInOut 2s infinite; /* 动画名称，每次动画持续2秒，并且无限循环 */
+}
+
+.platform-item {
+    display: block;
+}
+
+.platform-title {
+    font-size: 36px;
+    text-shadow: 2px 0 2px #000;
+    font-weight: bolder;
+}
+
+.platform-logo {
+    width: 72px;
+    height: 72px;
+}
+
+.platform-active {
+    background-color: var(--color-2);
+    border-radius: 15px;
+    background-repeat: repeat;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    background-image: var(--content-backgorund-image);
+    overflow: hidden;
+}
+
+.platform-content{
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin-top: 10vh;
+
+}
+
+.platform-bg{
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+}
+
+
+.menu-scroll-area {
+    margin-top: 6vh;
+    height: 53vh;
+}
+
+.menu-list {
+    display: block;
+    width: 100%;
+}
+
+.menu-list .q-item {
+    text-align: center !important;
+    display: block;
+    padding: 0;
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+}
+
+.menu-active {
+    background: var(--q-primary);
+    color: #FFF;
+}

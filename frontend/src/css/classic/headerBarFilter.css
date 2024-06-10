@@ -1,0 +1,59 @@
+.filter-wrapper {
+    padding-bottom: 5px;
+    margin: 0;
+    background: var(--color-3);
+}
+
+.filter-wrapper .search-btn {
+    height: 25px;
+    width: 50px;
+    min-height: 25px;
+    margin: 4px 0 0 4px;
+    padding: 0;
+    font-size: 10px;
+}
+
+.filter-input {
+    font-size: 12px;
+    background: var(--color-2);
+    width: 80px;
+}
+
+:deep(.q-select) {
+    min-height: 25px !important;
+    max-width: 100px;
+    height: 25px !important;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+
+:deep(.q-field__input) {
+    min-height: 25px !important;
+    height: 25px !important;
+
+}
+
+:deep(.q-field__native) {
+    min-height: 25px !important;
+    height: 25px !important;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+:deep(.q-field__control) {
+    min-height: 25px !important;
+    height: 25px !important;
+    padding: 0 1px 0 5px;
+}
+
+:deep(.q-field__marginal) {
+    min-height: 25px !important;
+    height: 25px !important;
+}
+
+.filter-badge{
+    padding: 5px;
+    background: var(--color-3);
+}

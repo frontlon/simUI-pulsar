@@ -1,0 +1,76 @@
+
+
+.rom-wrapper {
+}
+
+.rom-scroll {
+    height: calc(100vh - 30px) !important;
+    width: 100%;
+    max-width: 100%;
+}
+
+.active {
+    background: rgba(255,255,255,0.2);
+}
+
+
+.module-title {
+    text-align: center;
+    word-break: break-all;
+    white-space: pre-wrap;
+    background: var(--color-1);
+}
+
+.image-error {
+    background: var(--color-0);
+    color: var(--color-6);
+}
+
+.rom-list {
+
+}
+
+.active {
+    background: var(--q-primary);
+}
+
+.rom-list .rom-img{
+    width: 20px;
+}
+
+.rom-block {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.img-direction-0 {
+}
+
+.img-direction-1 {
+    aspect-ratio: 4/3;
+}
+
+.img-direction-2 {
+    aspect-ratio: 3/4;
+}
+
+.img-direction-3 {
+    aspect-ratio: 16/9;
+}
+
+.img-direction-4 {
+    aspect-ratio: 9/16;
+}
+
+.img-direction-5 {
+    aspect-ratio: 3/2;
+}
+
+.img-direction-6 {
+    aspect-ratio: 2/3;
+}
+
+.img-direction-7 {
+    aspect-ratio: 1/1;
+}

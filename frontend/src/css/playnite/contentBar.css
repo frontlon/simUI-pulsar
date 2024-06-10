@@ -1,0 +1,236 @@
+.rightbar-wrapper {
+    height: calc(100vh - 31px) !important;
+    position: relative;
+    border-left: 1px solid var(--color-2);
+
+}
+
+.bg-mask {
+    background-image: var(--content-backgorund-mask);
+    background-repeat: repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.panel-default {
+    background: url("/images/ico.png") no-repeat center center;
+    height: calc(100vh - 64px) !important;
+    opacity: 0.3;
+}
+
+.panel-desc {
+    height: calc(100vh - 31px) !important;
+    line-height: 1.5em;
+    overflow: auto;
+    padding: 0 10px;
+}
+
+.panel-desc :deep(div) {
+    padding: 10px 10px 0 10px;
+}
+
+.panel-desc :deep(p) {
+    padding: 10px 10px 0 10px;
+}
+
+.panel-desc :deep(img) {
+    max-width: 100%;
+}
+
+.bg-wrapper {
+    height: calc(50vh - 31px);
+    /*background-image: linear-gradient(to bottom, rgba(0,0,0,0),rgba(0,0,0,1)), var(--content-backgorund-image);*/
+    background-image: var(--content-backgorund-image);
+    box-shadow: inset 0px 1px 50px #000;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+.bg-video-slider {
+    width: 60%;
+    left: 20%;
+    top: 20%;
+    position: absolute;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bg-wrapper:hover .bg-video-slider {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.bg-wrapper:active .bg-video-slider {
+    opacity: 1;
+}
+
+.bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.content-wrapper {
+    height: calc(50vh);
+    width: 100%;
+}
+
+.content {
+    height: calc(50vh);
+    overflow: auto;
+    padding-top: 20px;
+}
+
+.title-wrapper {
+    position: relative;
+    height: 200px;
+    margin-top: -210px;
+    z-index: 3;
+}
+
+.title-wrapper h1 {
+    text-shadow: 2px 2px 5px #000;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 1.2em;
+    left: 30px;
+    bottom: 10px;
+    margin: 0;
+    position: absolute;
+    width: calc(70% - 70px);
+}
+
+
+.title-wrapper .right-carousel {
+    background-position: top center;
+    background-color: initial;
+    position: absolute;
+    height: 200px;
+    width: 30%;
+    right: 30px;
+    bottom: 0;
+}
+
+.title-wrapper .no-carousel {
+    text-align: center;
+    background: var(--color-2);
+    color: var(--color-6);
+    right: 50px;
+    line-height: 200px;
+    opacity: 0.8;
+}
+
+.title-wrapper .right-carousel .q-carousel__slide {
+    background-size: contain !important;
+    background: no-repeat center bottom transparent;
+    height: 200px;
+}
+
+.title-wrapper .right-carousel .q-carousel__slide:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.thumbs-wrapper .q-img:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.carousel-video {
+    width: 100%;
+    height: 200px;
+}
+
+.right-title {
+    font-size: 20px;
+    color: var(--color-15);
+    margin: 10px 0 10px 0;
+}
+
+/*启动按钮*/
+.run-btn-list {
+    margin-top: 10px;
+}
+
+.run-btn-list .q-btn {
+    display: block;
+    width: 100%;
+    height: 36px;
+    line-height: 2em;
+    margin-bottom: 5px;
+}
+
+/*评分*/
+.rating {
+    margin: 15px 0;
+}
+
+/*资料*/
+.rombase {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+    font-size: 14px;
+}
+
+.rombase .rombase-item {
+    word-break: break-all;
+    word-wrap: break-word;
+    margin-bottom: 5px;
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+}
+
+.rombase .rombase-item:nth-child(even){
+    padding-left: 10%;
+    width: 40%;
+}
+
+.rombase-noflex {
+    display: block;
+}
+
+.rombase-noflex .rombase-item {
+    width: 100%;
+
+}
+
+.rombase .rombase-item p {
+    margin: 0;
+}
+
+.rombase .rombase-item .title {
+    color: var(--q-primary);
+}
+
+.rombase .rombase-item .no-set {
+    opacity: 0.3;
+}
+
+.doc {
+    min-height: 100px;
+    height: 40vh;
+    padding: 4px 0;
+}
+
+.doc-empty {
+    color: var(--color-6);
+
+}
+
+.empty {
+    text-align: center;
+    color: var(--color-6);
+}

@@ -1,0 +1,9 @@
+body{
+    font-size: 36px;
+    width:100px!important;
+
+}
+
+.border-in{
+    font-size: var(--base-font-size);
+}

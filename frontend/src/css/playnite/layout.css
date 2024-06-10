@@ -1,0 +1,70 @@
+:root {
+    --content-backgorund-image: "";
+    --content-backgorund-mask: "";
+    --content-backgorund-size: "";
+    --content-backgorund-repeat: "";
+    --base-font-size: "";
+}
+
+.bg {
+    background-color: var(--color-2);
+    background-image: var(--content-backgorund-image);
+    background-repeat: var(--content-backgorund-repeat);
+    background-size: var(--content-backgorund-size);
+    transition: background-image 0.2s linear;
+    font-size: var(--base-font-size);
+}
+
+.bg:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: calc(100vh);
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-image 0.5s linear;
+}
+
+.bg-mask {
+    background-image: var(--content-backgorund-mask);
+    background-repeat: repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.fuzzy1:before {
+    backdrop-filter: blur(1px);
+}
+
+.fuzzy3:before {
+    backdrop-filter: blur(3px);
+}
+
+.fuzzy5:before {
+    backdrop-filter: blur(5px);
+}
+
+.fuzzy7:before {
+    backdrop-filter: blur(7px);
+}
+
+.fuzzy9:before {
+    backdrop-filter: blur(9px);
+}
+
+.fuzzy15:before {
+    backdrop-filter: blur(15px);
+}
+
+.fuzzy30:before {
+    backdrop-filter: blur(30px);
+}
+
+.fuzzy45:before {
+    backdrop-filter: blur(45px);
+}
+

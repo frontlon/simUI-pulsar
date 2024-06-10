@@ -1,0 +1,48 @@
+.left-wrapper {
+    min-height: 500px;
+    background: var(--color-2);
+    margin-right: 10px;
+}
+
+.platform-scroll {
+    height: 500px;
+}
+
+.right-wrapper {
+    background: var(--color-2);
+}
+
+.q-tab-panel {
+    padding: 0 15px !important;
+}
+
+.platform-list .q-item {
+    padding: 10px;
+    margin: 0
+}
+
+.editor {
+    width: 100%;
+    min-height: 460px;
+}
+
+.platform-active {
+    color: var(--color-text-brand) !important;
+    background: var(--q-primary);
+}
+
+:deep(.q-editor__content img) {
+    max-width: 200px;
+}
+
+.q-banner {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.tag-label-wrapper {
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid var(--color-3);
+    width: 100%;
+}

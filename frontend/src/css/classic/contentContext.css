@@ -1,0 +1,78 @@
+
+.q-item {
+    font-size: 12px !important;
+    border: 0;
+    padding: 0 10px;
+    height: 32px;
+    min-height: 32px;
+    line-height: 32px;
+}
+
+.context-list .q-item {
+    padding: 0 0 0 10px;
+}
+
+.context-list .q-icon {
+    font-size: 12px;
+}
+
+.q-item:nth-child(odd) {
+    background: var(--color-3);
+}
+
+.q-item:nth-child(even) {
+    background: var(--color-4);
+}
+
+.context-list .q-separator {
+    border: 0;
+    height: 1px;
+    line-height: 1px;
+    border: none;
+    border-top: 1px solid var(--color-0);
+    border-bottom: 1px solid var(--color-4);
+}
+
+.avatar {
+    max-width: 24px;
+    min-width: 24px;
+}
+
+.avatar img {
+    width: 16px;
+}
+
+/*运行游戏*/
+.rungame {
+    padding-left: 0 !important;
+}
+
+.rungame-left {
+    padding-right: 10px !important;
+}
+
+.rungame-right {
+    padding-left: 0px;
+}
+
+.rungame-right-ico {
+    height: 32px;
+    padding-left: 10px;
+}
+
+.move-list .q-item:nth-child(odd) {
+    background: none;
+}
+
+.move-list .q-item:nth-child(even) {
+    background: none;
+}
+
+.sub-tree{
+    padding:10px 10px 10px 30px
+}
+
+.move-list .submenu-active{
+    color: var(--color-15);
+    background: var(--q-primary) !important;
+}

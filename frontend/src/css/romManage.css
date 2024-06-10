@@ -1,0 +1,39 @@
+
+.wrapper{
+    margin: 0 auto;
+}
+
+:deep(::-webkit-scrollbar) {
+    width: 20px !important;
+    height: 10px !important;;
+}
+
+.rom-list {
+    background: var(--color-1);
+}
+
+:deep(.q-table th) {
+    text-align: left;
+    font-weight: bold;
+    color: var(--color-9);
+}
+
+:deep(.q-table td) {
+    text-align: left;
+}
+
+:deep(.q-table th:first-child) {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--color-3);
+    color: var(--color-15);
+}
+
+:deep(.q-table td:first-child) {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--color-3);
+    color: var(--color-15);
+}

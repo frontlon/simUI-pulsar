@@ -1,0 +1,47 @@
+html,body{
+    height: auto;
+    overflow: visible;
+    border: 1px solid #f00;
+}
+.manage-wrapper {
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+.manage-wrapper .q-tab-panels {
+    background: none;
+    padding: 0;
+}
+
+.manage-wrapper .q-tab-panel, .q-item {
+    padding: 0;
+}
+
+.manage-wrapper .mt {
+    margin-top: 8px;
+}
+
+.manage-wrapper .separator {
+    height: 5px;
+}
+
+.manage-wrapper .q-list {
+    margin-bottom: 20px;
+}
+
+.manage-wrapper .q-item {
+    margin: 3px 0
+}
+
+.manage-wrapper h6 {
+    margin: 20px 0 10px 0
+}
+
+.open-dialog {
+    cursor: pointer;
+}
+
+.bottom-bar {
+    text-align: right;
+    margin-top: 20px;
+}

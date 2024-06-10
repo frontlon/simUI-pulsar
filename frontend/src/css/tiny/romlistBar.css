@@ -1,0 +1,143 @@
+.platform-title {
+    position: absolute;
+    right: 30px;
+    top: 40px;
+    line-height: 1em;
+    font-size: 48px;
+    opacity: 0.3;
+    font-weight: bolder;
+}
+
+.rom-wrapper {
+    width: 100%;
+    height: calc(100vh - 30px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+.thumb-box {
+    width: 30%;
+    height: 80%;
+    display: flex;
+    align-content: center;
+    justify-items: right;
+    justify-content: right;
+    justify-self: right;
+}
+
+
+.carousel {
+    background: none !important;
+    background-position: top center;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel .q-carousel__slide {
+    background-size: contain !important;
+    background: no-repeat center center transparent;
+    height: 200px;
+    width: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-img {
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+}
+
+.no-carousel {
+    text-align: center;
+    color: var(--color-6);
+    right: 50px;
+    opacity: 0.8;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.page-box {
+    margin: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.page-box .page-num {
+    width: 100%;
+    line-height: 2em;
+    font-size: 18px;
+}
+
+.page-box .page-num.top {
+    border-bottom: 1px solid #FFF;
+}
+
+.rom-box {
+    width: 30%;
+    height: 80%;
+}
+
+.rom-scroll {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+}
+
+.image-error {
+    background: var(--color-0);
+    color: var(--color-6);
+}
+
+.rom-title{}
+
+.rom-title .master-title {
+    font-size: var(--base-font-size);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rom-title .sub-title {
+    font-size: calc(var(--base-font-size) - 5px);
+    color: var(--color-6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.rom-list .active {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.rom-list .active .sub-title {
+    color: var(--color-2);
+}
+
+.rom-list .rom-img {
+    width: 48px;
+    height: 48px;
+}
+
+.rom-list .q-item{
+    padding: 10px;
+    height: 65px;
+}
+
+.empty-romlist{
+    font-size: 28px;
+    opacity: 0.5;
+}

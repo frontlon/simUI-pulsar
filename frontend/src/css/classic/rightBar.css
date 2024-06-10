@@ -1,0 +1,185 @@
+/* tab */
+.rightbar-wrapper {
+    height: calc(100vh - 64px) !important;
+    background: var(--color-3);
+}
+
+.panel-default{
+    background:no-repeat center center;
+    height: calc(100vh - 64px) !important;
+    opacity: 0.3;
+}
+
+.panel-desc{
+    line-height: 1.5em;
+}
+.panel-desc :deep(div){
+    padding:10px 10px 0 10px;
+}
+.panel-desc :deep(p){
+    padding:10px 10px 0 10px;
+}
+
+.panel-desc :deep(img){
+    max-width: 100%;
+}
+
+.tab-card, .tab-card .panels {
+    background: none;
+    padding-bottom: 20px;
+}
+
+.tab-card, .tab-card .q-tab-panel {
+    padding: 0
+}
+
+.no-carousel{
+    text-align: center;
+    padding: 50px 0;
+    background: var(--color-2);
+    color:  var(--color-6);
+}
+
+.right-carousel {
+    background: none !important;
+    background-position: top center;
+    height: 200px;
+}
+
+.right-carousel .q-carousel__slide {
+    background-size: contain !important;
+    background: no-repeat center center transparent;
+    height: 200px;
+}
+
+.right-carousel .q-carousel__slide:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.thumbs-wrapper .q-img:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.carousel-video{
+    width: 100%;height:200px
+}
+
+.right-title {
+    color: var(--color-9);
+    margin: 10px 0 10px 0;
+}
+
+/*启动按钮*/
+.run-btn-list {
+    margin-top: 10px;
+}
+
+.run-btn-list .q-btn {
+    display: block;
+    width: 100%;
+    min-height: 36px;
+    line-height: 2em;
+    margin-bottom: 5px;
+}
+
+.run-btn-list .sub-btn {
+    opacity: 0.8;
+}
+
+/*模拟器列表*/
+.sim-list .q-item {
+    padding: 0 10px;
+}
+
+.sim-list .q-radio {
+    display: flex;
+}
+
+.sim-active {
+    background: var(--color-4);
+    color: inherit;
+}
+
+/*评分*/
+.rating {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/*资料*/
+.rombase p {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    display: inline-block;
+    border-radius: 50px;
+    padding: 2px 10px;
+    margin: 5px;
+    user-select: text;
+}
+
+/*游戏运行信息*/
+.state-module {
+    display: flex;
+    margin-bottom: 20px;
+
+}
+
+.state-module .q-item {
+    margin: 0 3px;
+    padding: 10px 0;
+    background: var(--color-2);
+}
+
+.state-module .q-item:first-child {
+    margin-left: 0;
+}
+
+.state-module .q-item:last-child {
+    margin-right: 0;
+}
+
+.state-module .q-card {
+    width: 100%;
+    text-align: center;
+    background: none;
+}
+
+.state-module .q-card .text1 {
+    font-size: 14px;
+}
+
+.state-module .q-card .text2 {
+    margin-top: 10px;
+    color: var(--color-8);
+}
+
+/*图集*/
+
+.thumbs-wrapper .q-img {
+    margin-bottom: 15px
+}
+
+.doc{
+    min-height: 100px;
+    height: 200px;
+    padding:4px 0;
+}
+.strategy{
+    padding: 16px;
+}
+
+.strategy :deep(.ctl){
+    width: 16px;
+}
+
+.strategy :deep(img){
+    max-width: 100%;
+}
+
+.empty {
+    text-align: center;
+    color: var(--color-6);
+}

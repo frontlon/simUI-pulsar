@@ -1,0 +1,118 @@
+/*scrollbar*/
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    transition: opacity .3s;
+    will-change: opacity;
+    cursor: grab;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/*context-menu*/
+.dark {
+    --mx-menu-backgroud: var(--color-1) !important;
+    --mx-menu-hover-backgroud: var(--color-2) !important;;
+    --mx-menu-active-backgroud: var(--color-3) !important;;
+    --mx-menu-divider: var(--color-0) !important;
+}
+
+/* modules */
+.q-menu {
+    border: 1px solid var(--color-3);
+    box-shadow: 0 0 10px var(--color-1);
+    max-height: max-content !important;
+    background-color: var(--color-1);
+}
+
+.q-card {
+    background: var(--color-1);
+}
+
+.q-tab-panels {
+    background: var(--color-1);
+}
+
+.q-chip {
+    background: var(--color-1);
+}
+
+.q-editor {
+    background: var(--color-1);
+}
+
+.q-banner {
+    background: var(--color-1);
+}
+
+.q-badge {
+    color: var(--color-text);
+}
+
+.q-field__label {
+    color: var(--color-text) !important;
+}
+
+.q-field--highlighted .q-field__control{
+    background: var(--color-2)!important;
+}
+
+.q-checkbox--dark .q-checkbox__inner--truthy{
+    color: var(--q-primary)!important;
+}
+
+.q-checkbox--dark .q-checkbox__svg{
+    color: var(--color-text)!important;
+}
+
+.q-checkbox--dark .text-primary{
+    background: none;
+}
+
+.q-checkbox--dark .q-checkbox__bg{
+    color: inherit;
+}
+
+.q-toggle--dark .q-toggle__inner--truthy .q-toggle__thumb {
+    color: var(--q-primary)!important;
+}
+
+.q-toggle--dark .q-toggle__inner--truthy .q-toggle__track {
+    background: var(--q-primary)!important;
+}
+
+.q-table--dark{
+    background: var(--color-2);
+}
+
+.q-table--dark .q-table__top{
+    background:  var(--color-1);
+}
+.q-table--dark .q-table__title{
+    color: var(--color-8);
+}
+
+.vue-star-rating-star{
+    margin: 0 2px;
+}
+
+
+.q-select-content{
+    max-height: calc(100vh - 200px)!important;
+}
+
+.q-select-content-min{
+    max-height: 50vh!important;
+}

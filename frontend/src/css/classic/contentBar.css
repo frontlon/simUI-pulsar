@@ -1,0 +1,195 @@
+.rom-wrapper {
+    background-color: var(--color-2);
+    /*transform: perspective(500px) rotate3d(1, 0, 0, 10deg);*/
+}
+
+.rom-wrapper:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 64px) !important;
+    background-image: var(--content-backgorund-image);
+    background-repeat: var(--content-backgorund-repeat);
+    background-size: var(--content-backgorund-size);
+    transition: background-image  0.5s linear;
+}
+
+.bg-mask{
+    background-image: var(--content-backgorund-mask);
+    background-repeat: repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.fuzzy1:before {
+    filter: blur(1px);
+}
+
+.fuzzy3:before {
+    filter: blur(3px);
+}
+
+.fuzzy5:before {
+    filter: blur(5px);
+}
+
+.fuzzy7:before {
+    filter: blur(7px);
+}
+
+.fuzzy9:before {
+    filter: blur(9px);
+}
+
+.fuzzy15:before {
+    filter: blur(15px);
+}
+
+.fuzzy30:before {
+    filter: blur(30px);
+}
+
+.fuzzy45:before {
+    filter: blur(45px);
+}
+
+.rom-scroll {
+    box-shadow: inset 0 0 10px var(--color-1);
+    height: calc(100vh - 64px) !important;
+    padding-left: 30px;
+    width: 100%;
+    max-width: 100%
+}
+
+.rom-block {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fav-avatar {
+    background: var(--q-primary);
+    position: absolute;
+    top: 0;
+    right: 12px;
+    transform: translateY(-50%);
+}
+
+.active {
+    background: var(--q-primary);
+}
+
+.fab {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+}
+
+.img-direction-0 {
+}
+
+.img-direction-1 {
+    aspect-ratio: 4/3;
+}
+
+.img-direction-2 {
+    aspect-ratio: 3/4;
+}
+
+.img-direction-3 {
+    aspect-ratio: 16/9;
+}
+
+.img-direction-4 {
+    aspect-ratio: 9/16;
+}
+
+.img-direction-5 {
+    aspect-ratio: 3/2;
+}
+
+.img-direction-6 {
+    aspect-ratio: 2/3;
+}
+
+.img-direction-7 {
+    aspect-ratio: 1/1;
+}
+
+.module-title {
+    text-align: center;
+    word-break: break-all;
+    white-space: pre-wrap;
+    background: var(--color-1);
+}
+
+.image-error {
+    background: var(--color-0);
+    color: var(--color-6);
+}
+
+.rom-list {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    background: var(--color-2);
+}
+
+.rom-list th {
+    text-align: left;
+    font-weight: bold;
+    color: var(--color-9);
+}
+
+.rom-list th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+.rom-list td {
+    text-align: left;
+}
+
+.rom-list td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+.letter-list {
+    padding: 5px 0;
+    position: absolute;
+    left: 5px;
+    top: 20px;
+    z-index: 3;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.letter {
+    padding: 0;
+    width: 24px;
+    height: 19px;
+    min-height: 19px;
+    line-height: 2em;
+    text-align: center;
+}
+
+.letter-active {
+    background: var(--q-primary);
+}
+
+.letter-active :deep(.q-item__section) {
+    color: var(--color-text-brand);
+}
+
+
+
