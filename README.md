@@ -4,9 +4,11 @@
 
 
 
-**SimUI Pulsar 是由热爱街机文化的玩家开发的免费专业游戏ROM管理软件。**
+[[EN]](README_EN.MD)
 
-**SimUI Pulsar是SimUI的重构版本。**
+**SimUI Pulsar 是由热爱街机文化的玩家开发的免费专业游戏ROM管理软件。是SimUI的重构版本。**
+
+
 
 ## 软件介绍
 
@@ -20,12 +22,19 @@
 
 支持游戏简介、游戏攻略，支持富文本显示；
 
-支持自定义皮肤、支持多语言、支持Lua脚本注入；
+支持自定义皮肤、支持多语言；
 
-软件懒加载机制、软件改名、下载缩略图、自定义实用工具等诸多功能。
+支持手柄、支持摇杆；
 
+软件懒加载机制、软件改
 
-![](readme/thumb.jpg)
+名、下载缩略图、自定义实用工具等诸多功能。
+
+![](readme/1.jpg)
+
+![](readme/2.jpg)
+
+![](readme/3.jpg)
 
 &nbsp;
 ## 软件地址
@@ -54,3 +63,11 @@ utils  公共库
 ```
 
 
+
+## 相关技术文档
+
+wails:https://wails.io/docs/introduction/
+
+vue3:https://vuejs.org/guide/introduction.html
+
+quasar:https://quasar.dev/docs
