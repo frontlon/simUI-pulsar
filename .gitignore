@@ -1,0 +1,12 @@
+build/bin
+node_modules
+frontend/dist
+frontend/.quasar
+frontend/wailsjs
+frontend/package.json.md5
+.idea
+frontend/public/temp
+.env
+cache
+.github
+.gitee
