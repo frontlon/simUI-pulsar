@@ -78,6 +78,24 @@ func (m *Filter) DeleteByFileNames(platform uint32, t string, nameList []string)
 	return nil
 }
 
+// 删除不存在的平台下的所有menu
+func (m *Filter) DeleteByNotPlatform(platforms []string) error {
+
+	if len(platforms) == 0 {
+		m.Truncate()
+		return nil
+	}
+
+	model := &Filter{}
+	result := getDb().Not("platform", platforms).Delete(&model)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return result.Error
+}
+
 // 清空表数据
 func (m *Filter) Truncate() error {
 	result := getDb().Delete(&m)

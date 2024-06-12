@@ -3,7 +3,7 @@
   <!-- 平台栏 -->
   <q-scroll-area class="platform-wrapper wrap">
 
-    <q-select standout square :options="tagList" v-model="activeTag" emit-value map-options :label="lang.label"
+    <q-select v-if="tagList.length > 1" standout square :options="tagList" v-model="activeTag" emit-value map-options :label="lang.label"
               dense="dense"
               style="font-size:12px">
       <template v-slot:no-option>

@@ -157,9 +157,15 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 }
 
 // 删除不存在的平台下的所有menu
-func (*Menu) DeleteByNotPlatform(platforms []string) error {
-	m := &Menu{}
-	result := getDb().Not("platform", platforms).Delete(&m)
+func (m *Menu) DeleteByNotPlatform(platforms []string) error {
+
+	if len(platforms) == 0 {
+		m.Truncate()
+		return nil
+	}
+
+	model := &Menu{}
+	result := getDb().Not("platform", platforms).Delete(&model)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)

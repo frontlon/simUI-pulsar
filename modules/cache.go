@@ -418,6 +418,12 @@ func ClearPlatform() {
 	if err := (&db.Menu{}).DeleteByNotPlatform(pfs); err != nil {
 		fmt.Println(err)
 	}
+
+	//清空不存在的平台（filter表）
+	if err := (&db.Filter{}).DeleteByNotPlatform(pfs); err != nil {
+		fmt.Println(err)
+	}
+
 }
 
 /**

@@ -9,6 +9,7 @@
     padding: 0 10px;
     background: var(--color-2);
     color: var(--color-7);
+    font-size: calc(var(--base-font-size) - 2px);
 }
 
 .menu-title .q-badge {
@@ -19,15 +20,21 @@
 .menu-item {
     text-align: left;
     padding: 0 16px;
+    font-size: calc(var(--base-font-size) - 2px);
 
 }
 
 .menu-sub-item-wrapper {
     background: var(--color-2);
     box-shadow: inset 0 0 5px var(--color-1);
+    font-size: calc(var(--base-font-size) - 2px);
 }
 
 .item-font, .q-item {
+    font-size: calc(var(--base-font-size) - 2px);
+}
+
+.menu-sub-item{
 }
 
 .menu-sub-item .q-item-label {
@@ -37,15 +44,15 @@
 
 .menu-sub-item .q-item-section {
     text-indent: 20px;
-    padding: 20px
+    padding: 20px;
 }
 
 .menu-item .q-item-label {
     text-indent: 20px;
-    padding: 20px
+    padding: 20px;
 }
 
 .menu-item .q-item-section {
     text-indent: 20px;
-    padding: 20px
+    padding: 20px;
 }
