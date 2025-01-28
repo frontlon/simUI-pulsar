@@ -2,6 +2,7 @@
 import 'animate.css'
 import {useGlobalStore} from "stores/globalData";
 import {storeToRefs} from "pinia";
+import {ref} from "vue";
 
 const global = useGlobalStore();
 const {lang} = storeToRefs(global);
@@ -109,6 +110,7 @@ export const listColumnOptions = [
 ];
 
 export const fontsizeOptions = ['12px', '14px', '16px', '18px', '24px', '28px', '32px', '36px', '48px'];
+export const fontFamilyOptions = ref([]);
 
 export const backgroundRepeatOptions = [
   {value: 'cover', label: lang.value.cover},

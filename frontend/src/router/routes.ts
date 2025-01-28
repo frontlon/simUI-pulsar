@@ -3,6 +3,13 @@ import {RouteRecordRaw} from 'vue-router';
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
+        component: () => import('pages/home/Layout.vue'),
+        meta: {
+            refreshPage: true
+        }
+    },
+    {
+        path: '/default',
         component: () => import('pages/classic/Layout.vue'),
         meta: {
             refreshPage: true

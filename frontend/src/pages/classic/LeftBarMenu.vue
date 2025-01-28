@@ -87,8 +87,8 @@ function handleMenuData(data: any[]) {
   let index = 0;
   let create = [
     {Path: "", Name: lang.value.all, IsLike: 0, Index: index++, SubMenu: []},
+    {Path: "favorite", Name: lang.value.favorite, IsLike: 0, Index: index++, SubMenu: []},
   ];
-
 
   if (romCountMap.value["/"] != undefined && romCountMap.value["/"] > 0) {
     create.push({Path: "/", Name: lang.value.notCate, IsLike: 0, Index: index++, SubMenu: []})

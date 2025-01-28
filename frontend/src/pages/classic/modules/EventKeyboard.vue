@@ -70,6 +70,9 @@ function keyboardOpt(event) {
   } else if (event.ctrlKey && event.key.toLowerCase() === 'h') { //设为隐藏
     event.preventDefault();
     manageEventKeyboard("setHide")
+  } else if (event.ctrlKey && event.key.toLowerCase() === 'f') { //设为喜爱
+    event.preventDefault();
+    manageEventKeyboard("setFavorite")
   } else if (event.ctrlKey && event.key.toLowerCase() === 'r') { //修改别名
     event.preventDefault();
     manageEventKeyboard("renameAlias")

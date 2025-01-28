@@ -2,7 +2,7 @@
   <div class="absolute-full title-image">
     <q-img :src="titleInfo.image" loading="lazy" :class="{'mask': titleInfo.hideText == 0}"/>
     <h1 v-if="titleInfo.hideText == 0">{{ titleInfo.title }}</h1>
-    <h2 v-if="titleInfo.hideText == 0">{{ titleInfo.subTitle }}</h2>
+    <h2 v-if="titleInfo.hideText == 0" >{{ titleInfo.subTitle }}</h2>
   </div>
 </template>
 

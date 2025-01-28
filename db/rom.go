@@ -21,6 +21,7 @@ type Rom struct {
 	RomName       string  // rom文件名
 	SimId         uint32  // 正在使用的模拟器id
 	Score         float64 // 评分
+	Favorite      uint8   // 我的最爱 0否 1是
 	Hide          uint8   // 是否隐藏
 	Size          string  // rom文件大小
 	BaseNameEn    string  // 英文名
@@ -98,6 +99,8 @@ func (m *Rom) Get(showHide uint8, pages int, platform uint32, menu string, menuL
 	if menu != "" {
 		if menu == "hide" {
 			where["hide"] = 1
+		} else if menu == "favorite" {
+			where["favorite"] = 1
 		} else {
 			if menuLike == 0 {
 				where["menu"] = menu //精确搜索菜单
@@ -145,21 +148,21 @@ func (m *Rom) Get(showHide uint8, pages int, platform uint32, menu string, menuL
 	sort := "pinyin ASC"
 	switch confSort {
 	case 1:
-		sort = "pinyin ASC"
+		sort = "pinyin ASC" //名称升序
 	case 2:
-		sort = "pinyin DESC"
+		sort = "pinyin DESC" //名称降序
 	case 3:
-		sort = "score ASC,pinyin ASC"
+		sort = "base_year ASC,pinyin ASC" //年份升序
 	case 4:
-		sort = "score DESC,pinyin ASC"
+		sort = "base_year DESC,pinyin ASC" //年份降序
 	case 5:
-		sort = "base_year ASC,pinyin ASC"
+		sort = "score ASC,pinyin ASC" //评分升序
 	case 6:
-		sort = "base_year DESC,pinyin ASC"
+		sort = "score DESC,pinyin ASC" //评分降序
 	case 7:
-		sort = "run_num DESC,pinyin ASC"
+		sort = "run_num DESC,pinyin ASC" //运行次数降序
 	case 8:
-		sort = "run_lasttime DESC,pinyin ASC"
+		sort = "run_lasttime DESC,pinyin ASC" //最后运行时间降序
 	}
 	mod := getDb().Select("*").Where(where).Where(likeWhere).Order(sort)
 
@@ -308,6 +311,8 @@ func (*Rom) GetByPinyin(showHide uint8, pages int, platform uint32, menu string,
 	if menu != "" {
 		if menu == "hide" {
 			where["hide"] = 1
+		} else if menu == "favorite" {
+			where["favorite"] = 1
 		} else {
 			if menuLike == 0 {
 				where["menu"] = menu //精确搜索菜单
@@ -388,9 +393,9 @@ func (*Rom) GetMasterRomByPlatform(platform uint32) ([]*Rom, error) {
 	return volist, result.Error
 }
 
-func (*Rom) GetByPid(platform uint32, romName string) (*Rom, error) {
+func (*Rom) GetMasterRom(platform uint32, romName string) (*Rom, error) {
 	vo := &Rom{}
-	result := getDb().Where("platform = ? AND pid = ?", platform, romName).First(&vo)
+	result := getDb().Where("platform = ? AND rom_name = ?", platform, romName).First(&vo)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -493,6 +498,8 @@ func (m *Rom) Count(showHide uint8, platform uint32, menu string, menuLike int, 
 	if menu != "" {
 		if menu == "hide" {
 			where["hide"] = 1
+		} else if menu == "favorite" {
+			where["favorite"] = 1
 		} else {
 			if menuLike == 0 {
 				where["menu"] = menu //精确搜索菜单
@@ -533,7 +540,7 @@ func (m *Rom) Count(showHide uint8, platform uint32, menu string, menuLike int, 
 		likeWhere += `AND (name LIKE "%` + keyword + `%" or link_file LIKE "%` + keyword + `%" or pinyin LIKE "%` + keyword + `%")`
 	}
 
-	result := getDb().Table(m.TableName()).Where(where).Where(likeWhere).Group("rom_name").Count(&count)
+	result := getDb().Table(m.TableName()).Where(where).Where(likeWhere).Count(&count)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -551,6 +558,8 @@ func (m *Rom) CountByPinyin(showHide uint8, pages int, platform uint32, menu str
 	if menu != "" {
 		if menu == "hide" {
 			where["hide"] = 1
+		} else if menu == "favorite" {
+			where["favorite"] = 1
 		} else {
 			if menuLike == 0 {
 				where["menu"] = menu //精确搜索菜单
@@ -618,6 +627,15 @@ func (m *Rom) UpdateName() error {
 // 更新隐藏状态
 func (m *Rom) UpdateHide() error {
 	result := getDb().Table(m.TableName()).Where("rom_name = ?", m.RomName).Update("hide", m.Hide)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+// 更新喜爱状态
+func (m *Rom) UpdateFavorite() error {
+	result := getDb().Table(m.TableName()).Where("rom_name = ?", m.RomName).Update("favorite", m.Favorite)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -836,6 +854,7 @@ func (m *Rom) CreateInfoMd5() string {
 		m.LinkFile,
 		m.RomName,
 		utils.ToString(m.Hide),
+		utils.ToString(m.Favorite),
 		m.Size,
 		utils.ToString(m.RunNum),
 		utils.ToString(m.RunLasttime),

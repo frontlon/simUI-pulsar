@@ -17,6 +17,7 @@ type RomSetting struct {
 	RunLasttime string // 最后运行时间
 	SimId       string // 正在使用的模拟器id
 	SimSetting  string //ROM模拟器设置
+	Favorite    string //是否为喜爱
 }
 
 var RomSettingList map[uint32]map[string]*RomSetting
@@ -59,7 +60,7 @@ func GetRomSettingByPlatform(platform uint32) (map[string]*RomSetting, error) {
 			continue
 		}
 
-		create := []string{"", "", "", "", "", "", ""}
+		create := []string{"", "", "", "", "", "", "", ""}
 		createLen := len(create)
 		i := 1
 		for a, b := range r {
@@ -105,6 +106,9 @@ func GetRomSettingByPlatform(platform uint32) (map[string]*RomSetting, error) {
 		}
 		if len(create) >= 7 {
 			lists.SimSetting = strings.TrimSpace(create[6])
+		}
+		if len(create) >= 8 {
+			lists.Favorite = strings.TrimSpace(create[7])
 		}
 
 		RomSettingList[platform][create[0]] = lists
@@ -219,7 +223,7 @@ func WriteDataToRomSettingFile(filePath string, data map[string]*RomSetting) err
 
 	for _, v := range data {
 
-		str := strings.Join([]string{v.Complete, v.Hide, v.RunNum, v.RunLasttime, v.SimId, v.SimSetting}, "")
+		str := strings.Join([]string{v.Complete, v.Hide, v.RunNum, v.RunLasttime, v.SimId, v.SimSetting, v.Favorite}, "")
 
 		if str == "" {
 			continue
@@ -233,6 +237,7 @@ func WriteDataToRomSettingFile(filePath string, data map[string]*RomSetting) err
 			strings.TrimSpace(v.RunLasttime),
 			strings.TrimSpace(v.SimId),
 			strings.TrimSpace(v.SimSetting),
+			strings.TrimSpace(v.Favorite),
 		})
 
 	}
@@ -252,5 +257,6 @@ func getRomSettingTitle() []string {
 		"runLastTime", // 最后运行时间
 		"simId",       // 正在使用的模拟器id
 		"simSetting",  // 模拟器配置
+		"favorite",    // 是否为喜爱
 	}
 }

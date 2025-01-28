@@ -10,7 +10,8 @@
                     :active-class="'active animate__animated animate__faster ' + platformUi.BlockClickAnimate"
                     :id="'rom-ele-'+ index" :active="activeRom === item.Id"
                     @click="clickGame(item.Id,index)">
-              <q-card flat style="width: 100%" :style="platformUi.BlockHideBackground ?'background:none' : ''">
+              <q-card flat style="width: 100%" :style="platformUi.BlockHideBackground ?'background:none' : ''"
+              @dblclick="openSimDialog(item.Id)">
                 <q-img v-if="item.ThumbPic" :src="item.ThumbPic" loading="lazy" fit="fill"
                        :class="'img-direction-'+platformUi.BlockDirection">
                   <template v-slot:error>
@@ -66,7 +67,7 @@ import {useGlobalStore} from 'stores/globalData';
 import {storeToRefs} from 'pinia';
 import {GetGameCount, GetGameList} from "app/wailsjs/go/controller/Controller";
 import {closePlatformDialog, getMenuListByPlatform, getPlatformList} from 'pages/playnite/Platform.vue'
-import {closeContentDialog, openRunGameDialogByKeyboard} from 'pages/playnite/ContentBar.vue'
+import {closeContentDialog, openRunGameDialogByKeyboard,openSimDialog} from 'pages/playnite/ContentBar.vue'
 
 const global = useGlobalStore();
 const {
@@ -418,6 +419,7 @@ export default {
     return {
       nextPage,
       clickGame,
+      openSimDialog,
       activeMenu,
       activePlatform,
       activeRom,

@@ -67,6 +67,15 @@ func (m *Platform) SetUiDefaultDefault(data PlatformUIDefault) PlatformUIDefault
 		data.BackgroundMask = utils.WailsPathEncode(data.BackgroundMask, true)
 	}
 
+	if data.Font.Type == 2 && !utils.WailsPathCheck(data.Font.Src) {
+		abs := utils.ToAbsPath(data.Font.Src, "")
+		if !utils.FileExists(abs) {
+			data.Font = PlatformUIFont{}
+		} else {
+			data.Font.Src = utils.WailsPathEncode(data.Font.Src, true)
+		}
+	}
+
 	return data
 }
 func (m *Platform) SetUiDefaultPlaynite(data PlatformUIPlaynite) PlatformUIPlaynite {
@@ -115,6 +124,15 @@ func (m *Platform) SetUiDefaultPlaynite(data PlatformUIPlaynite) PlatformUIPlayn
 		data.BackgroundMask = utils.WailsPathEncode(data.BackgroundMask, true)
 	}
 
+	if data.Font.Type == 2 && !utils.WailsPathCheck(data.Font.Src) {
+		abs := utils.ToAbsPath(data.Font.Src, "")
+		if !utils.FileExists(abs) {
+			data.Font = PlatformUIFont{}
+		} else {
+			data.Font.Src = utils.WailsPathEncode(data.Font.Src, true)
+		}
+	}
+
 	return data
 }
 func (m *Platform) SetUiDefaultTiny(data PlatformUITiny) PlatformUITiny {
@@ -145,6 +163,15 @@ func (m *Platform) SetUiDefaultTiny(data PlatformUITiny) PlatformUITiny {
 
 	if data.BackgroundMask != "" {
 		data.BackgroundMask = utils.WailsPathEncode(data.BackgroundMask, true)
+	}
+
+	if data.Font.Type == 2 && !utils.WailsPathCheck(data.Font.Src) {
+		abs := utils.ToAbsPath(data.Font.Src, "")
+		if !utils.FileExists(abs) {
+			data.Font = PlatformUIFont{}
+		} else {
+			data.Font.Src = utils.WailsPathEncode(data.Font.Src, true)
+		}
 	}
 
 	return data

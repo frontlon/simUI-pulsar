@@ -52,52 +52,62 @@ type PlatformUI struct {
 }
 
 type PlatformUIDefault struct {
-	NameType            uint8    // 显示名称类型(1:别名;2:文件名)
-	BlockThumbType      string   // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
-	RomSort             uint8    // rom列表排序方式
-	BaseFontsize        string   // 字体大小
-	BlockSize           uint8    // 当前模块缩放等级
-	BlockMargin         string   // 是否显示模块间距
-	BlockDirection      uint8    // 模块显示方向（0自动、1横向、2竖向）
-	BlockClickAnimate   string   // 模块点击动画
-	BlockHideTitle      uint8    // 是否隐藏标题
-	BlockHideBackground uint8    // 是否隐藏模块背景
-	RomListStyle        uint8    // 当前列表样式(1:模块;2:表格)
-	RomListColumn       []string // 列表模式显示哪些列
-	BackgroundImage     string   // 背景图片
-	BackgroundRepeat    string   // 背景循环方式
-	BackgroundFuzzy     uint8    // 背景模糊级别
-	BackgroundMask      string   // 背景遮罩图
+	NameType            uint8          // 显示名称类型(1:别名;2:文件名)
+	BlockThumbType      string         // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
+	RomSort             uint8          // rom列表排序方式
+	BaseFontsize        string         // 字体大小
+	BlockSize           uint8          // 当前模块缩放等级
+	BlockMargin         string         // 是否显示模块间距
+	BlockDirection      uint8          // 模块显示方向（0自动、1横向、2竖向）
+	BlockClickAnimate   string         // 模块点击动画
+	BlockHideTitle      uint8          // 是否隐藏标题
+	BlockHideBackground uint8          // 是否隐藏模块背景
+	RomListStyle        uint8          // 当前列表样式(1:模块;2:表格)
+	RomListColumn       []string       // 列表模式显示哪些列
+	BackgroundImage     string         // 背景图片
+	BackgroundRepeat    string         // 背景循环方式
+	BackgroundFuzzy     uint8          // 背景模糊级别
+	BackgroundMask      string         // 背景遮罩图
+	Font                PlatformUIFont // 页面字体
 }
 
 type PlatformUIPlaynite struct {
-	NameType            uint8  // 显示名称类型(1:别名;2:文件名)
-	RomSort             uint8  // rom列表排序方式
-	BaseFontsize        string // 字体大小
-	BlockThumbType      string // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
-	BlockClickAnimate   string // 模块点击动画
-	BlockSize           uint8  // 当前模块缩放等级
-	BlockMargin         string // 是否显示模块间距
-	BlockDirection      uint8  // 模块显示方向（0自动、1横向、2竖向）
-	BlockHideTitle      uint8  // 是否隐藏标题
-	BlockHideBackground uint8  // 是否隐藏模块背景
-	BackgroundImage     string // 背景图片
-	BackgroundRepeat    string // 背景循环方式
-	BackgroundFuzzy     uint8  // 背景模糊级别
-	BackgroundMask      string // 背景遮罩图
-	HideCarousel        uint8  // 是否隐藏相册
+	NameType            uint8          // 显示名称类型(1:别名;2:文件名)
+	RomSort             uint8          // rom列表排序方式
+	BaseFontsize        string         // 字体大小
+	BlockThumbType      string         // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
+	BlockClickAnimate   string         // 模块点击动画
+	BlockSize           uint8          // 当前模块缩放等级
+	BlockMargin         string         // 是否显示模块间距
+	BlockDirection      uint8          // 模块显示方向（0自动、1横向、2竖向）
+	BlockHideTitle      uint8          // 是否隐藏标题
+	BlockHideBackground uint8          // 是否隐藏模块背景
+	BackgroundImage     string         // 背景图片
+	BackgroundRepeat    string         // 背景循环方式
+	BackgroundFuzzy     uint8          // 背景模糊级别
+	BackgroundMask      string         // 背景遮罩图
+	HideCarousel        uint8          // 是否隐藏相册
+	Font                PlatformUIFont // 页面字体
 }
 
 type PlatformUITiny struct {
-	NameType         uint8  // 显示名称类型(1:别名;2:文件名)
-	RomSort          uint8  // rom列表排序方式
-	BlockThumbType   string // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
-	BackgroundImage  string // 背景图片
-	BackgroundFuzzy  uint8  // 背景模糊级别
-	BackgroundMask   string // 背景遮罩图
-	BackgroundRepeat string // 背景循环方式
-	HideCarousel     uint8  // 是否隐藏相册
-	BaseFontsize     string // 字体大小
+	NameType         uint8          // 显示名称类型(1:别名;2:文件名)
+	RomSort          uint8          // rom列表排序方式
+	BlockThumbType   string         // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
+	BackgroundImage  string         // 背景图片
+	BackgroundFuzzy  uint8          // 背景模糊级别
+	BackgroundMask   string         // 背景遮罩图
+	BackgroundRepeat string         // 背景循环方式
+	HideCarousel     uint8          // 是否隐藏相册
+	BaseFontsize     string         // 字体大小
+	Font             PlatformUIFont // 页面字体
+}
+
+type PlatformUIFont struct {
+	Type   uint8  // 字体类型 1系统字体 2用户字体
+	Family string // 字体名称
+	Format string // 字体格式
+	Src    string // 字体路径
 }
 
 /**

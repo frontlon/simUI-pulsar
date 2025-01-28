@@ -7,15 +7,17 @@ import (
 )
 
 // 读取快捷工具
-func GetShortcuts() ([]*db.Shortcut, error) {
+func GetShortcuts(isAbs bool) ([]*db.Shortcut, error) {
 	volist, err := (&db.Shortcut{}).GetAll()
 	if err != nil {
 		utils.WriteLog(err.Error())
 		return nil, err
 	}
 
-	for k, v := range volist {
-		volist[k].Path = utils.ToAbsPath(v.Path, "")
+	if isAbs {
+		for k, v := range volist {
+			volist[k].Path = utils.ToAbsPath(v.Path, "")
+		}
 	}
 	return volist, nil
 }

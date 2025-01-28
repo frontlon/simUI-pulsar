@@ -7,8 +7,8 @@ import (
 )
 
 // 读取快捷工具
-func (a *Controller) GetShortcuts() string {
-	return Resp(modules.GetShortcuts())
+func (a *Controller) GetShortcuts(isAbs bool) string {
+	return Resp(modules.GetShortcuts(isAbs))
 }
 
 // 更新快捷工具

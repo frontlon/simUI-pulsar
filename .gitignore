@@ -1,9 +1,12 @@
 build/bin
+build/sh/prod_build.bat
 node_modules
 frontend/dist
 frontend/.quasar
 frontend/wailsjs
+tmp
 frontend/package.json.md5
+frontend/public/images/custom
 .idea
 frontend/public/temp
 .env

@@ -441,7 +441,8 @@ function showViewer(romIndex: number) {
     api({
       images: views,
       options: {
-        initialViewIndex: index
+        initialViewIndex: index,
+        title: [1, (image, imageData) => `${imageData.naturalWidth} × ${imageData.naturalHeight}`],
       }
     })
   }

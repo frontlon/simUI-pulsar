@@ -9,6 +9,7 @@ var CACHE_UNOWNED_PATH = "" //无效资源备份目录
 var CACHE_REPEAT_PATH = ""  //重复ROM备份目录
 var LANG_PATH = ""          //语言目录
 var RESOURCE_PATH = ""      //软件资源目录
+var FONT_PATH = ""          //字体目录
 
 var ROMBASE_FILE_NAME = "rombase"        //平台资料文件名
 var SETTING_FILE_NAME = "romsetting.csv" //平台rom配置文件名

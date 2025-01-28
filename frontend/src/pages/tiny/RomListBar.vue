@@ -4,7 +4,7 @@
     {{ platformName }}
   </div>
 
-  <div class="rom-wrapper" v-if="items.length > 0">
+  <div class="rom-wrapper" v-if="items != null && items.length > 0">
     <div v-if="platformUi.HideCarousel == 0" ref="carouselRef" class="thumb-box animate__animated animate__faster">
       <q-carousel v-if="thumbListCarousel.length > 0" animated infinite :autoplay="2500" v-model="slide"
                   class="carousel">
@@ -31,12 +31,12 @@
                     :id="'rom-ele-'+ index" :active="activeRom === item.Id"
                     @click="clickGame(item.Id,index)">
               <q-item-section side v-if="item.ThumbPic">
-                <q-img :src="item.ThumbPic" loading="lazy" fit="cover" class="rom-img"/>
+                <q-img :src="item.ThumbPic" loading="lazy" fit="contain" class="rom-img"/>
               </q-item-section>
               <q-item-section>
-                <div class="rom-title">
-                <div class="master-title">{{ platformUi.NameType == 1 ? item.Name : item.RomName }}</div>
-                <div class="sub-title">{{ item.subTitle }}</div>
+                <div class="rom-title" @dblclick="openRunGameDialog()">
+                  <div class="master-title">{{ platformUi.NameType == 1 ? item.Name : item.RomName }}</div>
+                  <div class="sub-title">{{ item.subTitle }}</div>
                 </div>
               </q-item-section>
             </q-item>
@@ -50,7 +50,7 @@
 
 
   </div>
-  <div class="rom-wrapper empty-romlist" v-else>
+  <div class="rom-wrapper empty-romlist" v-else-if="items != null">
     {{ lang.noGame }}
   </div>
 
@@ -118,7 +118,7 @@ const {
   activeVersion, activeScore, activeComplete, activeLetter, menuLike, platformUi, callbackOpts, theme
 } = storeToRefs(global);
 
-const items: any = ref([])
+const items: any = ref(null)
 const detail: any = ref(null)
 const detailIndex: any = ref(0)
 const platformName: any = ref("")
@@ -285,7 +285,6 @@ function nextPage(index: number, done: any) {
   var request = JSON.stringify(req);
   GetGameList(request).then((result: string) => {
     let resp = decodeApiData(result)
-    console.log(resp.data)
     if (resp.data.length > 0) {
 
       resp.data.forEach((item, index) => {
@@ -584,39 +583,37 @@ function openRunGameDialog() {
   tmpRomFocus = activeFocus.value
 
   //读取rom信息
-
   GetGameDetail(activeRom.value).then((result: string) => {
     let resp = decodeApiData(result)
     if (resp.err == "") {
       detail.value = resp.data
 
       //设置默认模拟器选项
-      if (!isEmpty(simulators.value)) {
-        let simId = 0
+      let simId = 0
+      if (simulators.value && simulators.value.length > 0) {
         simulators.value.forEach((item: any, index: number) => {
           if (item.Id == detail.value.Info.SimId) {
             simId = item.Id
           }
         })
-        detail.value.Info.SimId = simId > 0 ? simId : simulators.value[0].Id
-
-        console.log("asdfasdfasdfasdfasdf", detail.value)
-
-        if (detail.value.Sublist.length == 0) {
-          //一个游戏，直接打开模拟器对话框
-          openSimDialog(detail.value.Info.Id)
-        } else {
-          showGameDialog.value = true
-
-          //设置默认模拟器选项
-          setTimeout(function () {
-            //activeFocus.value = [4, 0]
-            let ele = document.getElementById('game-ele-0');
-            ele?.focus()
-          }, 100);
-
-        }
       }
+      detail.value.Info.SimId = simId
+
+      if (detail.value.Sublist.length == 0) {
+        //一个游戏，直接打开模拟器对话框
+        openSimDialog(detail.value.Info.Id)
+      } else {
+        showGameDialog.value = true
+
+        //设置默认模拟器选项
+        setTimeout(function () {
+          //activeFocus.value = [4, 0]
+          let ele = document.getElementById('game-ele-0');
+          ele?.focus()
+        }, 100);
+
+      }
+
     }
   })
 
@@ -629,30 +626,30 @@ function openSimDialog(romId) {
   simulators.value = []
 
   let platform = detail.value.Info.Platform
-  if (!isEmpty(simulatorMap.value[platform])) {
+  if (!simulatorMap.value[platform] || simulatorMap.value[platform].length == 0) {
+    //无模拟器运行
+    runGame(0)
+  } else if (simulatorMap.value[platform].length == 1) {
+    //只有一个模拟器运行游戏
+    let simId = simulatorMap.value[platform][0].Id
+    runGame(simId)
+  } else if (simulatorMap.value[platform].length > 1) {
+    //选择模拟器
+    simulators.value = simulatorMap.value[platform]
+    showSimDialog.value = true
 
-    if (simulatorMap.value[platform].length == 1) {
-      //运行游戏
-      let simId = simulatorMap.value[platform][0].Id
-      runGame(simId)
-    } else if (simulatorMap.value[platform].length > 1) {
-
-      //选择模拟器
-      simulators.value = simulatorMap.value[platform]
-      showSimDialog.value = true
-
-      //设置默认模拟器选项
-      setTimeout(function () {
-        simulators.value.forEach((item: any, index: number) => {
-          if (item.Id == detail.value.Info.SimId) {
-            let ele = document.getElementById('sim-ele-' + index);
-            ele?.focus()
-            //activeFocus.value = [5, index]
-          }
-        })
-      }, 100);
-    }
+    //设置默认模拟器选项
+    setTimeout(function () {
+      simulators.value.forEach((item: any, index: number) => {
+        if (item.Id == detail.value.Info.SimId) {
+          let ele = document.getElementById('sim-ele-' + index);
+          ele?.focus()
+          //activeFocus.value = [5, index]
+        }
+      })
+    }, 100);
   }
+
   showGameDialog.value = false
 }
 
@@ -713,6 +710,7 @@ export default {
       showSimDialog,
       runGame,
       openSimDialog,
+      openRunGameDialog,
     }
   }
 }

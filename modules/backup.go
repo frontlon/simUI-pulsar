@@ -10,6 +10,7 @@ import (
 	"simUI/constant"
 	"simUI/db"
 	"simUI/utils"
+	"strings"
 )
 
 type MergeDb struct {
@@ -69,7 +70,7 @@ func OutputOneRom(id uint64, zipFile string, outputSubRom, outputRes, outputConf
 			}
 
 			//子资源
-			fs, _ := components.GetSlaveRes(pth, info.RomName)
+			fs, _ := components.GetSlaveRes(pth, strings.TrimSpace(info.RomName))
 			if len(fs) > 0 {
 				for _, v := range fs {
 					openF, err := os.Open(v)

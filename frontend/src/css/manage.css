@@ -45,3 +45,17 @@ html,body{
     text-align: right;
     margin-top: 20px;
 }
+
+
+.editor {
+    width: 100%;
+    min-height: 400px;
+    margin-top: 10px;
+}
+
+.editor-desc{
+    display: flex;
+}
+.editor-desc .badge{
+    margin: 0 5px;
+}

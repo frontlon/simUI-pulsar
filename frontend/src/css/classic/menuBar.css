@@ -34,9 +34,6 @@
     font-size: calc(var(--base-font-size) - 2px);
 }
 
-.menu-sub-item{
-}
-
 .menu-sub-item .q-item-label {
     text-indent: 20px;
     padding: 20px;

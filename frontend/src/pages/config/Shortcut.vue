@@ -38,7 +38,7 @@ const shortcuts: any = ref([])
 
 onMounted(() => {
   //读取快捷工具
-  GetShortcuts().then((result: string) => {
+  GetShortcuts(false).then((result: string) => {
     let resp = decodeApiData(result)
     shortcuts.value = resp.data;
   })

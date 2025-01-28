@@ -47,3 +47,8 @@ func (a *Controller) SetTheme(theme string) string {
 func (a *Controller) UpdateThumbsOrders(orders []string) string {
 	return Resp("", modules.UpdateThumbsOrders(orders))
 }
+
+// 读取字体列表
+func (a *Controller) GetFontList() string {
+	return Resp(modules.GetFontList())
+}

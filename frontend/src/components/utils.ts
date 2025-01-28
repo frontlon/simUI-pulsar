@@ -36,7 +36,7 @@ export function isEmpty(data: any) {
 
 //调用go服务 同步
 export function decodeApiData(resp: string) {
-    console.log(resp)
+    //console.log(resp)
     return JSON.parse(resp);
 }
 
@@ -209,13 +209,46 @@ export function wailsPathDecode(p: string) {
 export function gotoTheme(theme: string) {
     SetTheme(theme).then(() => {
         switch (theme) {
+            case "Default":
+                global.goto("/default")
+                break
             case "Playnite":
                 global.goto("/playnite")
                 break
-            default:
-                global.goto("/")
+            case "Tiny":
+                global.goto("/tiny")
+                break
         }
     })
+}
+
+//加载字体
+export function loadFont(fontName,fontType, fontUrl) {
+    return new Promise((resolve, reject) => {
+        const style = document.createElement('style');
+
+        const fontFace = `
+            @font-face {
+                font-family: '${fontName}';
+                src: url('${fontUrl}') format('${fontType}');
+            }
+        `;
+
+        console.log("loadFont",fontFace)
+
+        style.appendChild(document.createTextNode(fontFace));
+
+        document.head.appendChild(style);
+
+        // 检查字体是否加载完成
+        const fontFaceSet = new FontFace(fontName, `url('${fontUrl}')`);
+        fontFaceSet.load().then(() => {
+            document.fonts.add(fontFaceSet);
+            resolve(); // 字体加载完成
+        }).catch(err => {
+            reject(err); // 字体加载失败
+        });
+    });
 }
 
 //调用go服务 异步

@@ -151,6 +151,9 @@
             <!--            <q-item clickable v-close-popup>
                           <q-item-section>{{lang.output}}</q-item-section>
                         </q-item>-->
+<!--            <q-item clickable v-close-popup @click="copyright()">
+              <q-item-section>{{ lang.copyright }}</q-item-section>
+            </q-item>-->
             <q-item clickable v-close-popup @click="about()">
               <q-item-section>{{ lang.about }}</q-item-section>
             </q-item>
@@ -187,6 +190,7 @@
 <script lang="ts">
 
 import AboutComponent from "src/components/AboutComponent.vue";
+import CopyrightComponent from "components/CopyrightComponent.vue";
 import UpgradeComponent from "src/components/UpgradeComponent.vue";
 import {Dialog, setCssVar} from "quasar";
 import {
@@ -262,7 +266,7 @@ export function initThemeColor() {
 //读取快捷工具
 export function initShortcuts() {
 
-  GetShortcuts().then((result: string) => {
+  GetShortcuts(true).then((result: string) => {
     let resp = decodeApiData(result)
     if (resp.err == "") {
       shortCutList.value = resp.data
@@ -350,6 +354,13 @@ export function createCache(opt: string) {
 function about() {
   Dialog.create({
     component: AboutComponent,
+  })
+}
+
+//版权窗口
+function copyright() {
+  Dialog.create({
+    component: CopyrightComponent,
   })
 }
 
@@ -481,6 +492,7 @@ export default {
       changeColor,
       createCache,
       about,
+      copyright,
       windowMinimise,
       windowMaximise,
       windowFullscreen,

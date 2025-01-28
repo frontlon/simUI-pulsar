@@ -290,6 +290,7 @@ func GetRomData(platform uint32, romMap map[string]*db.Rom) ([]*db.Rom, error) {
 			}
 
 			hide := uint8(0)
+			fav := uint8(0)
 			runNum := uint64(0)
 			runLastTime := int64(0)
 			simId := uint32(0)
@@ -298,6 +299,7 @@ func GetRomData(platform uint32, romMap map[string]*db.Rom) ([]*db.Rom, error) {
 			if romSetting[fileName] != nil {
 				complete = uint8(utils.ToInt(romSetting[fileName].Complete))
 				hide = uint8(utils.ToInt(romSetting[fileName].Hide))
+				fav = uint8(utils.ToInt(romSetting[fileName].Favorite))
 				runNum = uint64(utils.ToInt(romSetting[fileName].RunNum))
 				runLastTime = int64(utils.ToInt(romSetting[fileName].RunLasttime))
 				simId = uint32(utils.ToInt(romSetting[fileName].SimId))
@@ -319,6 +321,7 @@ func GetRomData(platform uint32, romMap map[string]*db.Rom) ([]*db.Rom, error) {
 				Pid:           pid,
 				RomName:       romData.RomName,
 				Hide:          hide,
+				Favorite:      fav,
 				Size:          fileSize,
 				RunNum:        runNum,
 				RunLasttime:   runLastTime,

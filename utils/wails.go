@@ -41,7 +41,7 @@ func WailsPathDecode(p string) string {
 	return Base64Decode(p)
 }
 
-// 检查是否为 wails路径
+// 检查是否为 wails路径 true是，false不是
 func WailsPathCheck(p string) bool {
 	if p == "" {
 		return false

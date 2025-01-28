@@ -2,21 +2,11 @@
   <q-dialog filled square ref="dialogRef">
     <q-card flat filled square class="q-dialog-plugin wrapper">
       <q-card-section>
-        <img src="/images/ico.png"/>
+        <img style="width: 50%" src="/images/copyright.png"/>
       </q-card-section>
       <q-card-section class="selectable">
-        <h5>SIMUI Pulsar v{{versionNo}}</h5>
-        <p>编译时间：{{buildTime}}</p>
-        <p>网站：<a target="_blank" href="https://www.simui.net/">www.simui.net</a></p>
-        <p>QQ群：<a target="_blank"
-                   href="https://qm.qq.com/q/6OUWHSMpV0">851347939(一群)</a>
-          |
-          <a target="_blank"
-             href="https://qm.qq.com/q/dd08MJdeqk">648286315(二群)</a>
-        </p>
-        <p>邮箱：front_diablo@163.com</p>
-        <h6>特别鸣谢</h6>
-        <p>春华秋实｜孟虎｜睡神林克｜wood.exe｜alexxyz2｜<br>冰澤｜Vanisper｜以及广大网友 ...</p>
+        <h5>copyright</h5>
+        <p>info</p>
       </q-card-section>
     </q-card>
   </q-dialog>
