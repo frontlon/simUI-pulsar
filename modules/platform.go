@@ -244,11 +244,11 @@ func UpdatePlatformUi(id uint32, theme string, data string) error {
 	ui := db.PlatformUI{}
 
 	if id == 0 {
-		//更新全部UI
+		//读取全部UI
 		conf := (&db.Config{}).GetConfig(true)
 		ui = conf.PlatformUi
 	} else {
-		//更新单个平台
+		//读取单个平台UI
 		pfConf := (&db.Platform{}).GetVOById(id, true)
 		ui = pfConf.Ui
 	}
@@ -257,6 +257,7 @@ func UpdatePlatformUi(id uint32, theme string, data string) error {
 		defUi := db.PlatformUIDefault{}
 		_ = json.Unmarshal([]byte(data), &defUi)
 		ui.Default = defUi
+
 	} else if theme == constant.UI_PLAYNITE {
 		pn := db.PlatformUIPlaynite{}
 		_ = json.Unmarshal([]byte(data), &pn)
@@ -286,5 +287,6 @@ func UpdatePlatformUi(id uint32, theme string, data string) error {
 		err = (&db.Platform{}).UpdateOneField(id, "ui", string(uiJson))
 	}
 	(&db.Platform{}).DelPlatformVOCache() //清空缓存
+	(&db.Config{}).RebuildConfig()        //清空缓存
 	return err
 }

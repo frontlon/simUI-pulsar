@@ -1,7 +1,7 @@
 <template>
 
   <!-- 平台栏 -->
-  <q-dialog maximized square v-model="showDialog" @hide="callbackDialog" transition-show="fade" transition-hide="fade">
+  <q-dialog maximized square v-model="showDialog" @contextmenu="closePlatformDialog" @hide="callbackDialog" transition-show="fade" transition-hide="fade">
     <q-card flat class="wrapper" @click="closePlatformDialog">
       <q-btn label="X" class="close-btn" @click="closePlatformDialog"></q-btn>
       <q-scroll-area class="platform-scroll-area" ref="platformScrollRef" v-if="platformList.length > 0">

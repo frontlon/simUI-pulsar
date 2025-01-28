@@ -49,6 +49,11 @@ func UpgradeDB() {
 		oldNum = utils.ToInt(sqlUpdateNum)
 	}
 
+	//如果num大于40，说明是从测试版升上来的，强制刷新，后期需要把这段代码删掉。
+	if oldNum > 40 {
+		oldNum = 5
+	}
+
 	//读取升级sql列表
 	sqls := db.DbUpdateSqlList(constant.VERSION_NO)
 	currNum := len(sqls)

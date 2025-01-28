@@ -28,6 +28,7 @@
 }
 
 .item-font, .q-item {
+    font-size: calc(var(--base-font-size) - 2px);
 }
 
 .menu-sub-item .q-item-label {

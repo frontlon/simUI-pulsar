@@ -14,5 +14,6 @@ func DbUpdateSqlList(version string) []string {
 		``,
 		`CREATE UNIQUE INDEX "idx_name" ON "config" ("name");`,
 		`INSERT INTO config ("name", "data", "desc") VALUES ('GameMultiOpen', '0', '是否允许模拟器游戏多开')`,
+		`ALTER TABLE rom ADD COLUMN "favorite" INTEGER NOT NULL DEFAULT 0`,
 	}
 }

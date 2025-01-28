@@ -3,7 +3,7 @@
     <div v-if="activeRom && !isEmpty(detail)">
 
       <div class="bg-wrapper">
-        <div class="bg-mask"></div>
+        <div class="bg-mask" v-if="!thumbListAlumb['video'] || thumbListAlumb['video'].length == 0"></div>
 
         <q-slider v-if="thumbListAlumb['video'] && thumbListAlumb['video'].length > 0"
                   v-model="videoVolumeSlider" class="bg-video-slider" :min="0" :max="100" @change="changeVideoVolume"/>
@@ -159,7 +159,7 @@
           <q-item v-for="(item,index) in simulators" clickable v-ripple :id="'sim-ele-'+index" :key="index"
                   @click="runGame(item.Id)">
             <q-item-section>
-              {{ item.Name }} - {{ index }}
+              {{ item.Name }}
             </q-item-section>
           </q-item>
         </q-list>
@@ -339,35 +339,36 @@ function openRunGameDialog() {
 
 
 //打开模拟器选择对话框
-function openSimDialog(romId) {
+export function openSimDialog(romId) {
   selectGameId.value = romId
   simulators.value = []
 
   let platform = detail.value.Info.Platform
-  if (!isEmpty(simulatorMap.value[platform])) {
 
-    if (simulatorMap.value[platform].length == 1) {
-      //运行游戏
-      let simId = simulatorMap.value[platform][0].Id
-      runGame(simId)
-    } else if (simulatorMap.value[platform].length > 1) {
+  if (!simulatorMap.value[platform] || simulatorMap.value[platform].length == 0) {
+    //无模拟器运行游戏
+    runGame(0)
+  } else if (simulatorMap.value[platform].length == 1) {
+    //只有一个模拟器运行游戏
+    let simId = simulatorMap.value[platform][0].Id
+    runGame(simId)
+  } else if (simulatorMap.value[platform].length > 1) {
+    //选择模拟器
+    simulators.value = simulatorMap.value[platform]
+    showSimDialog.value = true
 
-      //选择模拟器
-      simulators.value = simulatorMap.value[platform]
-      showSimDialog.value = true
-
-      //设置默认模拟器选项
-      setTimeout(function () {
-        simulators.value.forEach((item: any, index: number) => {
-          if (item.Id == detail.value.Info.SimId) {
-            let ele = document.getElementById('sim-ele-' + index);
-            ele?.focus()
-            //activeFocus.value = [5, index]
-          }
-        })
-      }, 100);
-    }
+    //设置默认模拟器选项
+    setTimeout(function () {
+      simulators.value.forEach((item: any, index: number) => {
+        if (item.Id == detail.value.Info.SimId) {
+          let ele = document.getElementById('sim-ele-' + index);
+          ele?.focus()
+          //activeFocus.value = [5, index]
+        }
+      })
+    }, 100);
   }
+
   showGameDialog.value = false
 }
 

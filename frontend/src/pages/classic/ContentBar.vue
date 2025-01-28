@@ -15,6 +15,7 @@
                     @click="clickGame(item.Id,index)">
               <q-card flat style="width: 100%" :style="platformUi.BlockHideBackground ?'background:none' : ''"
                       @dblclick="dbClickRunGame(item.Id)">
+
                 <q-img v-if="item.ThumbPic" :src="item.ThumbPic" loading="lazy" fit="fill"
                        :class="'img-direction-'+platformUi.BlockDirection">
                   <template v-slot:error>
@@ -29,6 +30,7 @@
                     <div class="absolute-full flex flex-center image-error">{{ lang.noThumb }}</div>
                   </template>
                 </q-img>
+
                 <q-card-section v-if="!platformUi.BlockHideTitle" class="module-title"
                                 :style="{'background':platformUi.BlockHideBackground ?'none' : ''}">
                   {{ platformUi.NameType == 1 ? item.Name : item.RomName }}
@@ -98,7 +100,7 @@
                 </q-img>
                 <q-card-section>
                   <div class="row no-wrap items-center">
-                    <div class="col ellipsis" v-if="!platformUi.BlockHideTitle"
+                    <div class="col" v-if="!platformUi.BlockHideTitle"
                          :style="{'background':platformUi.BlockHideBackground ?'none' : ''}">
                       {{ platformUi.NameType == 1 ? item.Name : item.RomName }}
                     </div>
@@ -214,9 +216,6 @@ export function changeContentBackground(bg: string) {
 
   root.style.setProperty('--base-font-size', platformUi.value.BaseFontsize);
 
-
-  console.log("asdfasdfasdfasdfasdf",platformUi.value.BaseFontsize)
-
   if (isEmpty(bg)) {
     root.style.setProperty('--content-backgorund-image', 'url(' + platformUi.value.BackgroundImage + ')');
   } else {
@@ -243,7 +242,7 @@ export function changeContentBackground(bg: string) {
 }
 
 //监听rom列表刷新
-watch([romState], (newValue, oldValue) => {
+watch([romState], async(newValue, oldValue) => {
   pageEnd = false;
   pageNum = 0;
   //滚动条回到最顶端
@@ -268,28 +267,30 @@ watch([romState], (newValue, oldValue) => {
     "simpleModel": "simple",
     "letter": activeLetter.value == "ALL" ? "" : activeLetter.value,
   };
+
   var request = JSON.stringify(req);
-  GetGameList(request).then((result: string) => {
-    let resp = decodeApiData(result)
-    items.value = resp.data;
-    console.log(resp.data)
+  let result = await GetGameList(request)
 
-    //列表模式
-    listColumns.value = [{label: lang.value.alias, field: "Name"},
-      {label: lang.value.romName, field: "RomName"}
-    ]
+  let resp = decodeApiData(result)
+  items.value = resp.data;
 
-    platformUi.value.RomListColumn.forEach((item: any, index: number) => {
-      listColumns.value.push({
-        label: lang.value[firstLetterToLower(item)],
-        field: item,
-      })
+  //列表模式
+  listColumns.value = [{label: lang.value.alias, field: "Name"},
+    {label: lang.value.romName, field: "RomName"}
+  ]
+
+  platformUi.value.RomListColumn.forEach((item: any, index: number) => {
+    listColumns.value.push({
+      label: lang.value[firstLetterToLower(item)],
+      field: item,
     })
   })
+
   GetGameCount(request).then((result: string) => {
     let resp = decodeApiData(result)
     romCount.value = resp.data;
   })
+
 });
 
 //点击游戏
@@ -300,8 +301,6 @@ function clickGame(romId: number, index: number) {
 
 //右键菜单操作回调
 watch(callbackOpts, (newValue: any, oldValue) => {
-
-  console.log("callbackOpts", newValue)
 
   // let romId = newValue.id;
   let opt = newValue.opt;
@@ -340,7 +339,11 @@ watch(callbackOpts, (newValue: any, oldValue) => {
       break;
     case "changeThumb": //更新展示图
       items.value[romIndex].ThumbPic = data
-      break
+      break;
+    case "setFavorite": //设置喜爱
+      if(activeMenu.value == "favorite" && data == 0){
+        items.value.splice(romIndex, 1)
+      }
   }
 })
 
@@ -576,5 +579,4 @@ export default {
 <style scoped>
 @import "src/css/classic/common.css";
 @import "src/css/classic/contentBar.css";
-
 </style>

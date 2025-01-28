@@ -20,7 +20,6 @@
     position: absolute;
     width: 100%;
     height: calc(100vh);
-    background-color:rgba(0,0,0,0.5);
     transition: background-image  0.5s linear;
 }
 

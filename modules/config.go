@@ -3,6 +3,7 @@ package modules
 import (
 	"encoding/json"
 	"os"
+	"simUI/components"
 	"simUI/config"
 	"simUI/constant"
 	"simUI/db"
@@ -83,6 +84,8 @@ func UpdateBaseConfig(data db.ConfigVO) error {
 	}
 	softName, _ := json.Marshal(data.SoftName)
 
+	splashScreen, _ := json.Marshal(data.SplashScreen)
+
 	m := &db.Config{}
 	m.UpdateOne("Cursor", data.Cursor)
 	m.UpdateOne("EnableUpgrade", data.EnableUpgrade)
@@ -92,6 +95,7 @@ func UpdateBaseConfig(data db.ConfigVO) error {
 	m.UpdateOne("AdminRunGame", data.AdminRunGame)
 	m.UpsertOne("WindowZoom", data.WindowZoom)
 	m.UpsertOne("GameMultiOpen", data.GameMultiOpen)
+	m.UpsertOne("SplashScreen", splashScreen)
 	return nil
 }
 
@@ -111,4 +115,59 @@ func SetTheme(theme string) error {
 func UpdateThumbsOrders(orders []string) error {
 	data, _ := json.Marshal(orders)
 	return (&db.Config{}).UpsertOne("ThumbOrders", string(data))
+}
+
+// 读取字体列表
+func GetFontList() ([]map[string]any, error) {
+	resp := []map[string]any{}
+
+	//头部加入系统默认字体
+	def := map[string]any{
+		"label": config.Cfg.Lang["systemDefault"],
+		"value": db.PlatformUIFont{},
+	}
+	resp = append(resp, def)
+
+	user := components.GetUserFontList()
+	system := components.GetSystemFontList()
+
+	if len(user) == 0 && len(system) == 0 {
+		return []map[string]any{}, nil
+	}
+
+	if len(user) > 0 {
+		head := map[string]any{
+			"label":   config.Cfg.Lang["userFont"],
+			"value":   "",
+			"disable": true,
+		}
+		resp = append(resp, head)
+
+		for _, v := range user {
+			f := map[string]any{
+				"label": v.Family,
+				"value": v,
+			}
+			resp = append(resp, f)
+		}
+	}
+
+	if len(system) > 0 {
+		head := map[string]any{
+			"label":   config.Cfg.Lang["systemFont"],
+			"value":   "",
+			"disable": true,
+		}
+		resp = append(resp, head)
+
+		for _, v := range system {
+			f := map[string]any{
+				"label": v.Family,
+				"value": v,
+			}
+			resp = append(resp, f)
+		}
+	}
+
+	return resp, nil
 }

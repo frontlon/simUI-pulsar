@@ -1,6 +1,6 @@
 <template>
   <div class="border-out" @resize="windowResize">
-    <div class="border-in">
+    <div class="border-in" :style="{ fontFamily: currentFont }">
 
       <div class="row">
         <div class="col-2" style="max-width:240px"
@@ -37,14 +37,14 @@
 
 <script setup lang="ts">
 
-import {onActivated, onBeforeUnmount} from "vue"
+import {onActivated, onBeforeUnmount, ref} from "vue"
 import {useGlobalStore} from 'src/stores/globalData'
-import {callSrv, decodeApiData, firstLetterToLower} from 'components/utils'
+import {callSrv, decodeApiData, loadFont, notify} from 'components/utils'
 import {
   CheckUpgrade,
   GetAllSimulator,
   GetConfig,
-  GetPlatformUi, GetTheme,
+  GetPlatformUi,
   UpdateOneConfig
 } from 'app/wailsjs/go/controller/Controller'
 import {storeToRefs} from "pinia";
@@ -62,22 +62,10 @@ import UpgradeComponent from "components/UpgradeComponent.vue";
 import axios from 'axios';
 
 const global = useGlobalStore();
-const {config,theme, platformUi, simulatorMap} = storeToRefs(global);
+const {lang, config, theme, platformUi, simulatorMap} = storeToRefs(global);
 
 theme.value = "Default"
-
-//启动时检查主题，跳转到默认主题
-GetTheme().then((result: string) => {
-  let resp = decodeApiData(result)
-  if (resp.err == "") {
-    let the = resp.data
-    if (the != "" && the != theme.value) {
-      let path = "/" + firstLetterToLower(the)
-      global.goto(path, {}, 1)
-    }
-  }
-})
-
+const currentFont = ref("Arial")
 onActivated(async () => {
 
   let conf = await callSrv("GetConfig")
@@ -89,6 +77,9 @@ onActivated(async () => {
 
   //初始化配置
   global.initData(conf);
+
+  //初始化字体
+  initFont()
 
   //初始化主题颜色
   initThemeColor()
@@ -165,6 +156,24 @@ const windowResize = debounce(() => {
   UpdateOneConfig("WindowWidth", window.innerWidth.toString())
   UpdateOneConfig("WindowHeight", window.innerHeight.toString())
 }, 500);
+
+//初始化字体
+const initFont = () => {
+  
+  let ui = platformUi.value
+
+  if (ui.Font.Type == 1) {
+    //系统字体
+    currentFont.value = ui.Font.Family
+  } else if (ui.Font.Type == 2) {
+    //用户字体
+    loadFont(ui.Font.Family, ui.Font.Format, ui.Font.Src).then((res) => {
+      currentFont.value = ui.Font.Family
+    }).catch((err) => {
+      notify("err", ui.Font.Family + lang.value.fontLoadErr)
+    })
+  }
+};
 
 </script>
 

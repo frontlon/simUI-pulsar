@@ -59,9 +59,6 @@ func RunGame(romId uint64, simId uint32) error {
 		//直接运行exe
 		cmd := slnk.Params
 		err = RunGameExe(romInfo.LinkFile, cmd)
-	} else if utils.InSlice(ext, constant.EXPLORER_EXTS) {
-		//依赖 explorer 启动
-		err = RunGameExplorer(romInfo.LinkFile)
 	} else {
 		//依赖模拟器
 		sim, err := (&db.Simulator{}).GetDefaultByPlatform(romInfo.Platform, simId)
@@ -98,7 +95,7 @@ func RunGame(romId uint64, simId uint32) error {
 		//记录运行次数和时间
 		rid := romId
 		if romInfo.Pid != "" {
-			parent, _ := (&db.Rom{}).GetByPid(romInfo.Platform, romInfo.Pid)
+			parent, _ := (&db.Rom{}).GetMasterRom(romInfo.Platform, romInfo.Pid)
 			if parent != nil {
 				rid = parent.Id
 			}
@@ -163,8 +160,9 @@ func runGameSimulator(romInfo *db.Rom, sim *db.Simulator) error {
 
 	//读取父游戏信息
 	var parent = &db.Rom{}
+	var err error
 	if romInfo.Pid != "" {
-		parent, err := (&db.Rom{}).GetByPid(romInfo.Platform, romInfo.Pid)
+		parent, err = (&db.Rom{}).GetMasterRom(romInfo.Platform, romInfo.Pid)
 		if err != nil {
 			return errors.New(config.Cfg.Lang["masterGameNotFound"])
 		}
@@ -177,8 +175,6 @@ func runGameSimulator(romInfo *db.Rom, sim *db.Simulator) error {
 	if utils.FileExists(sim.Path) == false {
 		return errors.New(config.Cfg.Lang["simNotFound"])
 	}
-
-	fmt.Println("asdfasdfasdfasdfasdf", sim.Unzip, sim)
 
 	//解压后运行 - 解压zip包
 	if sim.Unzip != "" {

@@ -132,7 +132,6 @@ func GetGameList(data *request.GetGameList) (any, error) {
 			}
 		}
 		thumbsMap[data.Platform] = components.GetMasterRomThumbs(blockThumbType, data.Platform, romNameMap[data.Platform])
-		fmt.Println("-=-=-=-=-=-", blockThumbType, data.Platform, romNameMap[data.Platform], thumbsMap)
 
 		for k, v := range datas {
 			if _, ok := thumbsMap[v.Platform]; !ok {
@@ -143,7 +142,6 @@ func GetGameList(data *request.GetGameList) (any, error) {
 			}
 
 			datas[k].ThumbPic = utils.WailsPathEncode(thumbsMap[v.Platform][v.RomName], true)
-			fmt.Println("aaaaaaaaaaaaaaa ", datas[k].ThumbPic)
 
 		}
 
@@ -489,7 +487,7 @@ func GetGameThumbs(id uint64, imgType string) ([]GameThumb, error) {
 		}
 
 		//读子资源
-		slaves, _ := components.GetSlaveRes(pth, info.RomName)
+		slaves, _ := components.GetSlaveRes(pth, strings.TrimSpace(info.RomName))
 
 		//子资源文件名排序
 		sort.Slice(slaves, func(i, j int) bool {
@@ -869,8 +867,6 @@ func BatchSetRomBase(platform uint32, data map[string]*db.RomSimpleVO) error {
  **/
 func GetFilter(platform uint32) (map[string][]map[string]any, error) {
 
-	fmt.Println(config.Cfg.Lang)
-
 	volist := []*db.Filter{}
 	if platform == 0 {
 		volist, _ = (&db.Filter{}).GetAll()
@@ -961,7 +957,7 @@ func GetRomSlaveResFile(dir string, prefix string) ([]string, error) {
 	extMap := utils.SliceToMap(constant.MEDIA_EXTS)
 
 	err := filepath.Walk(dir, func(p string, fi os.FileInfo, err error) error { //遍历目录
-		if err != nil { //忽略错误
+		if err != nil {                                                         //忽略错误
 			return err
 		}
 

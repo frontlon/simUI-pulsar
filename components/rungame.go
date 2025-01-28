@@ -17,9 +17,7 @@ import (
 
 var LAST_PROCESS int = 0
 
-/**
- * 运行游戏
- **/
+// 运行游戏
 func RunGame(exeFile string, cmd []string) error {
 
 	switch runtime.GOOS {
@@ -90,31 +88,6 @@ func OpenFolderByWindow(fileName string) error {
 	return errors.New("Program Is Not Exists")
 }
 
-/**
- * 关闭游戏
- **/
-func KillGame() error {
-
-	if LAST_PROCESS == 0 {
-		return nil
-	}
-
-	switch runtime.GOOS {
-	case "darwin":
-		c := exec.Command("kill", utils.ToString(LAST_PROCESS))
-		c.Start()
-	case "windows":
-		c := exec.Command("taskkill.exe", "/T", "/PID", utils.ToString(LAST_PROCESS))
-		c.Start()
-	case "linux":
-		c := exec.Command("kill", utils.ToString(LAST_PROCESS))
-		c.Start()
-	}
-
-	LAST_PROCESS = 0
-	return nil
-}
-
 // 从info.plist中读取应用程序名称
 func getDarwinAppName(p string) string {
 
@@ -148,17 +121,34 @@ func getDarwinAppName(p string) string {
 	return ""
 }
 
-// 播放音频
-func PlayAudio(params []string) error {
+// 关闭游戏
+func KillGame() error {
 
-	//检测rom文件是否存在
-	/*if utils.FileExists(config.Cfg.Default.MusicPlayer) == false {
-		return errors.New(config.Cfg.Lang["MusicPlayerNotFound"])
+	if LAST_PROCESS == 0 {
+		return nil
 	}
 
-	if err := exec.Command(config.Cfg.Default.MusicPlayer, params...).Start(); err != nil {
+	task := ""
+	args := []string{}
+	switch runtime.GOOS {
+	case "darwin":
+		task = "kill"
+		args = []string{utils.ToString(LAST_PROCESS)}
+	case "windows":
+		task = "taskkill.exe"
+		args = []string{"/T", "/PID", utils.ToString(LAST_PROCESS)}
+	case "linux":
+		task = "kill"
+		args = []string{utils.ToString(LAST_PROCESS)}
+	}
+
+	//执行kill操作
+	_, err := RunProgram(task, args)
+	if err != nil {
 		return err
-	}*/
+	}
+
+	LAST_PROCESS = 0
 	return nil
 }
 
@@ -170,6 +160,8 @@ func RunProgram(exeFile string, cmd []string) (int, error) {
 	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
 		return 0, err
 	}
+
+	config.AdminRunGame = 1 //强制使用管理员模式启动
 
 	if config.AdminRunGame == 1 {
 		fmt.Println("amin")
@@ -191,4 +183,18 @@ func RunProgram(exeFile string, cmd []string) (int, error) {
 		processId = result.Process.Pid
 	}
 	return processId, nil
+}
+
+// 播放音频
+func PlayAudio(params []string) error {
+
+	//检测rom文件是否存在
+	/*if utils.FileExists(config.Cfg.Default.MusicPlayer) == false {
+		return errors.New(config.Cfg.Lang["MusicPlayerNotFound"])
+	}
+
+	if err := exec.Command(config.Cfg.Default.MusicPlayer, params...).Start(); err != nil {
+		return err
+	}*/
+	return nil
 }

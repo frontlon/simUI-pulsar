@@ -126,6 +126,16 @@
 
           <!-- 游戏攻略 -->
           <q-tab-panel name="strategy">
+            <q-banner dense class="bg-grey-9 text-white">
+              <div class="editor-desc">
+                <q-badge outline align="middle" color="grey" label="ctrl" class="badge"/>
+                <span>+</span>
+                <q-badge outline align="middle" color="grey" label="shift" class="badge"/>
+                <span>+</span>
+                <q-badge outline align="middle" color="grey" label="v" class="badge"/>
+                <span>{{ lang.pastePlainText }}</span>
+              </div>
+            </q-banner>
             <q-editor class="editor" square v-model="strategy" :definitions="editorDefinitions"
                       :toolbar="EDITOR_TOOLBAR"/>
             <q-card-actions align="right" class="text-primary">

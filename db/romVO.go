@@ -17,6 +17,7 @@ type RomSimpleVO struct {
 	RomPath       string  // rom路径
 	Hide          uint8   // 展示图路径
 	Score         float64 // 评分
+	Favorite      uint8   // 我的最爱
 	ThumbPic      string  // 展示图路径
 	BaseNameEn    string  // 英文名
 	BaseNameJp    string  // 日文名
@@ -115,6 +116,7 @@ func (m *Rom) ConvertRomSimple(rom *Rom, subRoms []*Rom) *RomSimpleVO {
 		RomName:       rom.RomName,
 		Hide:          rom.Hide,
 		Score:         rom.Score,
+		Favorite:      rom.Favorite,
 		BaseNameEn:    rom.BaseNameEn,
 		BaseNameJp:    rom.BaseNameJp,
 		BaseType:      rom.BaseType,

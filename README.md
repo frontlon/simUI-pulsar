@@ -4,7 +4,7 @@
 
 
 
-[[EN]](README_EN.MD)
+[[EN]](README_EN.md)
 
 **SimUI Pulsar 是由热爱街机文化的玩家开发的免费专业游戏ROM管理软件。是SimUI的重构版本。**
 

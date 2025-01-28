@@ -32,19 +32,20 @@ func main() {
 
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 
-	//测试环境配置
+	//开发环境配置
 	if utils.FileExists(".env") {
 		rootpath, _ = utils.ReadFile(".env", true)
 		constant.DEV = true
 	}
 
 	rootpath = utils.ReplcePathSeparator(rootpath)
-	constant.VERSION_NO = "1.0.0"                     //当前版本id
-	constant.ROOT_PATH = rootpath + "/"               //当前软件的绝对路径
-	constant.LANG_PATH = rootpath + "/language/"      //语言目录
-	constant.CACHE_PATH = rootpath + "/cache/"        //缓存路径
-	constant.RESOURCE_PATH = rootpath + "/resources/" //软件资源目录
-
+	constant.VERSION_NO = "1.0.2"                                  //当前版本id
+	constant.BUILD_TIME = ""                                       //软件编译时间
+	constant.ROOT_PATH = rootpath + "/"                            //当前软件的绝对路径
+	constant.LANG_PATH = rootpath + "/language/"                   //语言目录
+	constant.CACHE_PATH = rootpath + "/cache/"                     //缓存路径
+	constant.RESOURCE_PATH = rootpath + "/resources/"              //软件资源目录
+	constant.FONT_PATH = constant.RESOURCE_PATH + "fonts/"         //字体目录
 	constant.CACHE_UNZIP_PATH = constant.CACHE_PATH + "unzip/"     //解压缓存路径
 	constant.CACHE_THUMB_PATH = constant.CACHE_PATH + "thumb_bak/" //展示图备份目录
 	constant.CACHE_UNOWNED_PATH = constant.CACHE_PATH + "unowned/" //无效资源备份目录
@@ -119,6 +120,12 @@ func main() {
 		conf.WindowHeight = 600
 	}
 
+	//检查是否有固定版本的webview2
+	webviewBrowserPath := constant.ROOT_PATH + "webview2"
+	if !utils.DirExists(webviewBrowserPath) {
+		webviewBrowserPath = ""
+	}
+
 	// https://wails.io/zh-Hans/docs/reference/options
 	app := NewApp()
 	ctl := controller.NewController()
@@ -147,6 +154,7 @@ func main() {
 			IsZoomControlEnabled: true,            //启用窗口缩放
 			ZoomFactor:           conf.WindowZoom, //窗口缩放比例
 			ResizeDebounceMS:     200,
+			WebviewBrowserPath:   webviewBrowserPath,
 			//DisableFramelessWindowDecorations: false,
 			//Messages: &windows.Messages{
 			//	InstallationRequired: "",

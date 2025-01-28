@@ -71,6 +71,11 @@ func (a *Controller) SetHide(id uint64, hide uint8) string {
 	return Resp("", modules.SetHide(id, hide))
 }
 
+// 设置喜爱
+func (a *Controller) SetFavorite(id uint64, fav uint8) string {
+	return Resp("", modules.SetFavorite(id, fav))
+}
+
 // 读取没有子游戏的主游戏列表
 func (a *Controller) GetGameListNotSubGame(req string) string {
 	data := &request.GetGameList{}

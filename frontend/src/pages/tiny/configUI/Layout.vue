@@ -50,6 +50,13 @@
                       :label="lang.baseFontsize"/>
           </q-item-section>
           <q-item-section>
+            <q-select filled square dense options-dense emit-value map-options :options="fontFamilyOptions"
+                      v-model="activeUi.Font" popup-content-class="q-select-content"
+                      :label="lang.font">
+              <q-tooltip class="bg-red">{{lang.fontWarn}}</q-tooltip>
+            </q-select>
+          </q-item-section>
+          <q-item-section>
             <q-select filled square dense options-dense emit-value map-options :options="boolOptions"
                       v-model="activeUi.HideCarousel" :label="lang.hideCarousel"/>
           </q-item-section>
@@ -107,7 +114,7 @@ import {decodeApiData, notify, wailsPathDecode} from "components/utils";
 import {useGlobalStore} from 'stores/globalData';
 import {storeToRefs} from 'pinia';
 import {
-  GetConfig,
+  GetConfig, GetFontList,
   GetPlatform,
   GetPlatformUi,
   OpenFileDialog,
@@ -118,10 +125,11 @@ import {
   backgroundRepeatOptions,
   boolOptions,
   fontsizeOptions,
+  fontFamilyOptions,
   sortOptions,
   thumbOptions,
   titleOptions,
-} from 'src/pages/classic/configUI/UiConst.vue';
+} from 'src/pages/tiny/configUI/UiConst.vue';
 
 const global = useGlobalStore();
 const {config, lang, rootPath, theme} = storeToRefs(global);
@@ -151,6 +159,12 @@ onMounted(() => {
       });
     }
   })
+
+  //读取字体列表
+  GetFontList().then((result)=>{
+    let resp = decodeApiData(result)
+    fontFamilyOptions.value = resp.data
+  })
 })
 
 function changePlatform() {
@@ -166,6 +180,10 @@ function changePlatform() {
       if (activeUi.value.BackgroundMask != "") {
         activeUi.value.BackgroundMask = wailsPathDecode(activeUi.value.BackgroundMask)
         activeUi.value.BackgroundMask = activeUi.value.BackgroundMask.replace(rootPath.value, "");
+      }
+      if (activeUi.value.Font.Type == 2) {
+        activeUi.value.Font.Src = wailsPathDecode(activeUi.value.Font.Src)
+        activeUi.value.Font.Src = activeUi.value.Font.Src.replace(rootPath.value, "");
       }
     }
   })

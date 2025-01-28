@@ -35,7 +35,7 @@
             <q-item-section>
               <q-input filled square dense :label="lang.softNameImage" v-model="config.SoftName.Image">
                 <template v-slot:append>
-                  <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image')"/>
+                  <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image','SoftNameImage')"/>
                 </template>
               </q-input>
             </q-item-section>
@@ -69,6 +69,25 @@
                         v-model="config.GameMultiOpen"/>
             </q-item-section>
           </q-item>
+
+          <q-item>
+            <q-item-section>
+              <q-input filled square dense :label="lang.splashScreenSrc" v-model="config.SplashScreen.Src">
+                <template v-slot:append>
+                  <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image','SplashScreenSrc')"/>
+                </template>
+              </q-input>
+            </q-item-section>
+            <q-item-section>
+              <q-select filled square dense map-options emit-value :options="splashScreenSizeOptions" :label="lang.splashScreenSize"
+                        v-model="config.SplashScreen.Size"/>
+            </q-item-section>
+            <q-item-section>
+              <q-select filled square dense map-options emit-value :options="splashScreenTimeOptions" :label="lang.splashScreenTime"
+                        v-model="config.SplashScreen.Time"/>
+            </q-item-section>
+          </q-item>
+
           <q-item>
             <q-item-section>
               <q-input filled square dense :label="lang.baiduPicSearch" v-model="config.SearchEnginesBaidu"/>
@@ -122,11 +141,30 @@ const zoomOptions = [
   {label: '175%', value: 1.75},
 ]
 
+const splashScreenSizeOptions = [
+  {label: '25%', value: "25%"},
+  {label: '50%', value: "50%"},
+  {label: '75%', value: "75%"},
+  {label: '100%', value: "100%"},
+]
+
+const splashScreenTimeOptions = [
+  {label: lang.value.close, value: 0},
+  {label: '1'+lang.value.second, value: 1},
+  {label: '2'+lang.value.second, value: 2},
+  {label: '3'+lang.value.second, value: 3},
+  {label: '4'+lang.value.second, value: 4},
+  {label: '5'+lang.value.second, value: 5},
+]
+
+
+
 onMounted(() => {
   //加载配置
   GetBaseConfig().then((result: string) => {
     let resp = decodeApiData(result)
     config.value = resp.data;
+
     if (config.value.WindowZoom == 0){
       config.value.WindowZoom = 1
     }
@@ -160,11 +198,19 @@ function updateShortcut() {
 }
 
 //选择文件
-function openFileDialog(opt: string) {
+function openFileDialog(opt: string,type:string) {
   OpenFileDialog(opt).then((result: string) => {
     let resp = decodeApiData(result)
     if (resp.err == "" && resp.data != "") {
-      config.value.SoftName.Image = resp.data
+
+      switch (type){
+        case "SoftNameImage":
+          config.value.SoftName.Image = resp.data;
+          break;
+        case "SplashScreenSrc":
+          config.value.SplashScreen.Src = resp.data
+          break;
+      }
     }
   })
 }

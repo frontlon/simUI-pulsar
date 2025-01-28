@@ -1,6 +1,6 @@
 <template>
   <div class="border-out" @resize="windowResize">
-    <div :class="'border-in bg fuzzy' + platformUi.BackgroundFuzzy">
+    <div :class="'border-in bg fuzzy' + platformUi.BackgroundFuzzy" :style="{ fontFamily: currentFont }">
       <div class="bg-mask"></div>
 
       <header-bar-tool/>
@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 
-import {onBeforeUnmount, onMounted} from "vue"
+import {onBeforeUnmount, onMounted, ref} from "vue"
 import {useGlobalStore} from 'src/stores/globalData'
-import {callSrv, decodeApiData} from 'components/utils'
+import {callSrv, decodeApiData, loadFont, notify} from 'components/utils'
 import {
   CheckUpgrade,
   GetAllSimulator,
@@ -51,7 +51,8 @@ import UpgradeComponent from "components/UpgradeComponent.vue";
 import axios from "axios";
 
 const global = useGlobalStore();
-const {config, theme, activeRom, platformUi, simulatorMap} = storeToRefs(global);
+const {lang,config, theme, activeRom, platformUi, simulatorMap} = storeToRefs(global);
+const currentFont = ref("Arial")
 
 onMounted(async () => {
 
@@ -66,6 +67,9 @@ onMounted(async () => {
 
   //初始化配置
   global.initData(conf);
+
+  //初始化字体
+  initFont()
 
   //初始化主题颜色
   initThemeColor()
@@ -138,6 +142,24 @@ const windowResize = debounce(() => {
   UpdateOneConfig("WindowWidth", window.innerWidth.toString())
   UpdateOneConfig("WindowHeight", window.innerHeight.toString())
 }, 500);
+
+
+//初始化字体
+const initFont = () => {
+  let ui = platformUi.value
+  if (ui.Font.Type == 1) {
+    //系统字体
+    currentFont.value = ui.Font.Family
+  } else if (ui.Font.Type == 2) {
+    //用户字体
+    loadFont(ui.Font.Family, ui.Font.Format, ui.Font.Src).then((res) => {
+      currentFont.value = ui.Font.Family
+    }).catch((err) => {
+      notify("err", ui.Font.Family + lang.value.fontLoadErr)
+    })
+  }
+};
+
 
 </script>
 

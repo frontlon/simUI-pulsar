@@ -11,6 +11,7 @@ import (
 	"simUI/config"
 	"simUI/db"
 	"simUI/utils"
+	"strings"
 	"time"
 )
 
@@ -109,7 +110,7 @@ func uploadFileHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		//设为子图
 		nano := utils.ToString(time.Now().UnixNano())
-		dst = res + "/" + vo.RomName + "/" + vo.RomName + "_" + nano + ext
+		dst = res + "/" + strings.TrimSpace(vo.RomName) + "/" + vo.RomName + "_" + nano + ext
 	}
 
 	//检查目录是否存在

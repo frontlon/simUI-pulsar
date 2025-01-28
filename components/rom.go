@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"simUI/constant"
 	"simUI/utils"
+	"strings"
 )
 
 // 读取游戏主资源
@@ -31,7 +32,7 @@ func GetMasterRes(typ string, platform uint32, romName string) string {
  * 读取游戏子资源
  **/
 func GetSlaveRes(dir string, masterRomName string) ([]string, error) {
-
+	
 	dir = utils.ToAbsPath(masterRomName, dir)
 
 	files := []string{}
@@ -73,7 +74,7 @@ func GetMasterRomThumbs(thumbType string, platform uint32, romNameMap map[string
 	picMap := utils.SliceToMap(constant.MEDIA_EXTS)
 
 	filepath.Walk(dir, func(filename string, f os.FileInfo, err error) error { //遍历目录
-		if err != nil { //忽略错误
+		if err != nil {                                                        //忽略错误
 			return err
 		}
 
@@ -81,7 +82,7 @@ func GetMasterRomThumbs(thumbType string, platform uint32, romNameMap map[string
 			return nil
 		}
 
-		fExt := utils.GetFileExt(f.Name())
+		fExt := strings.ToLower(utils.GetFileExt(f.Name()))
 		if _, ok := picMap[fExt]; !ok {
 			return nil
 		}

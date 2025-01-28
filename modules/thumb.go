@@ -6,6 +6,7 @@ import (
 	"simUI/config"
 	"simUI/db"
 	"simUI/utils"
+	"strings"
 	"time"
 )
 
@@ -78,7 +79,7 @@ func AddThumb(romId uint64, typ string, imageList []string) ([]string, error) {
 		} else {
 			//设为子图
 			nano := utils.ToString(time.Now().UnixNano() + int64(k))
-			dst = res + "/" + vo.RomName + "/" + vo.RomName + "_" + nano + ext
+			dst = res + "/" + strings.TrimSpace(vo.RomName) + "/" + vo.RomName + "_" + nano + ext
 		}
 
 		//拷贝文件
@@ -120,7 +121,7 @@ func DeleteThumb(romId uint64, typ string, master uint8, imgPath string) error {
 
 	if master == 1 {
 		//第一张子图设为主图
-		slaves, err := components.GetSlaveRes(res, vo.RomName)
+		slaves, err := components.GetSlaveRes(res, strings.TrimSpace(vo.RomName))
 		if err == nil && len(slaves) > 0 {
 			ext := utils.GetFileExt(imgPath)
 			dst := res + "/" + vo.RomName + ext
