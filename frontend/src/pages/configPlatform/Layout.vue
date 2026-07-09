@@ -1,6 +1,6 @@
 <template>
-  <div class="manage-wrapper">
-    <q-item style="--wails-draggable:drag">
+  <div class="manage-wrapper platform-config">
+    <q-item class="page-header" style="--wails-draggable:drag">
       <q-item-section avatar @click="$router.back()">
         <q-btn flat size="lg" icon="arrow_back" class="vertical-middle"/>
       </q-item-section>
@@ -8,13 +8,13 @@
         <h3>{{ lang.platformConfig }}</h3>
       </q-item-section>
     </q-item>
-    <div class="row">
+    <div class="row platform-layout">
 
-      <div class="col-3 left-wrapper">
-        <div>
-          <q-btn-group spread stretch>
-            <q-btn unelevated size="md" :label="lang.addPlatform" @click="addPlatform()"/>
-            <q-btn unelevated size="md" :label="lang.delPlatform" @click="deletePlatform()"/>
+      <div class="col-auto left-wrapper">
+        <div class="sidebar-inner">
+          <q-btn-group spread class="sidebar-actions">
+            <q-btn unelevated :label="lang.addPlatform" @click="addPlatform()"/>
+            <q-btn unelevated :label="lang.delPlatform" @click="deletePlatform()"/>
           </q-btn-group>
 
           <q-scroll-area class="platform-scroll" :visible="false">
@@ -28,8 +28,8 @@
         </div>
       </div>
       <div class="col right-wrapper" v-if="activePlatformInfo">
-        <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary"
-                align="justify">
+        <q-tabs v-model="tab" class="config-tabs text-grey" active-color="primary" indicator-color="primary"
+                align="left">
           <q-tab name="base" :label="lang.platformConfig" tabindex="1"/>
           <q-tab name="simulator" :label="lang.simConfig" tabindex="2"/>
           <q-tab name="desc" :label="lang.platformDesc" tabindex="3"/>
@@ -38,122 +38,134 @@
         <q-separator/>
         <q-tab-panels v-model="tab" keep-alive animated>
           <!-- 基本信息 -->
-          <q-tab-panel name="base">
-            <h6>{{ lang.platformBaseInfo }}</h6>
-            <q-list>
-              <q-item>
-                <q-item-section>
-                  <q-input filled square dense :label="lang.platformName" v-model="activePlatformInfo.Name"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-input filled square dense :label="lang.label" v-model="activePlatformInfo.Tag"/>
-                </q-item-section>
-                <q-item-section>
-                  <q-input filled square dense :label="lang.platformIcon" class="open-dialog"
-                           v-model="activePlatformInfo.Icon">
-                    <template v-slot:append>
-                      <q-icon name="upload_file" @click="openFileDialog()"/>
-                    </template>
-                  </q-input>
-                </q-item-section>
-                <q-item-section>
-                  <q-select filled square dense map-options emit-value :options="boolOptions" :label="lang.hideName"
-                            v-model="activePlatformInfo.HideName">
-                    <q-tooltip>{{ lang.showHidePlatform }}</q-tooltip>
-                  </q-select>
-                </q-item-section>
-              </q-item>
-            </q-list>
-            <h6>{{ lang.menuConfig }}</h6>
-            <q-list>
-              <q-item>
-                <q-item-section>
-                  <q-input filled square dense :label="lang.platformResDir" class="open-dialog"
-                           v-model="activePlatformInfo.RootPath">
-                    <template v-slot:append>
-                      <q-icon name="create_new_folder" @click="openDirectoryDialog('root')"/>
-                    </template>
-                  </q-input>
-                </q-item-section>
-                <q-item-section>
-                  <q-input filled square dense :label="lang.romDir" class="open-dialog"
-                           v-model="activePlatformInfo.RomPath">
-                    <template v-slot:append>
-                      <q-icon name="create_new_folder" @click="openDirectoryDialog('rom')"/>
-                    </template>
-                    <q-tooltip>{{ lang.tipRomDir }}</q-tooltip>
-                  </q-input>
-                </q-item-section>
-              </q-item>
-            </q-list>
+          <q-tab-panel name="base" class="config-panel">
+            <q-card flat bordered class="config-section">
+              <q-card-section>
+                <div class="section-title">{{ lang.platformBaseInfo }}</div>
+                <div class="row q-col-gutter-md">
+                  <div class="col-12 col-sm-6">
+                    <q-input filled square :label="lang.platformName" v-model="activePlatformInfo.Name"/>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-input filled square :label="lang.label" v-model="activePlatformInfo.Tag"/>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-input filled square :label="lang.platformIcon" class="open-dialog"
+                             v-model="activePlatformInfo.Icon">
+                      <template v-slot:append>
+                        <q-icon name="upload_file" @click="openFileDialog()"/>
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-select filled square map-options emit-value :options="boolOptions" :label="lang.hideName"
+                              v-model="activePlatformInfo.HideName">
+                      <q-tooltip>{{ lang.showHidePlatform }}</q-tooltip>
+                    </q-select>
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
 
-            <h6>{{ lang.romExt }}</h6>
-            <q-list>
-              <q-item>
-                <q-item-section>
-                  <q-input filled square dense :label="lang.romExt" style="width: 100%"
-                           v-model="addExtInput" @keydown.enter="addExt">
-                    <template v-slot:append>
-                      <q-btn round dense flat icon="add" @click="addExt"/>
-                    </template>
-                    <q-tooltip>{{ lang.tipRomExt }}</q-tooltip>
-                  </q-input>
-                </q-item-section>
-                <q-item-section side>
-                  <q-btn square flat icon="assignment" @click="addNoExt()">
-                    <q-tooltip>添加无扩展名支持</q-tooltip>
-                  </q-btn>
-                </q-item-section>
-                <q-item-section side>
-                  <q-btn square flat icon="delete" @click="clearRomExts()">
-                    <q-tooltip>删除所有类型</q-tooltip>
-                  </q-btn>
-                </q-item-section>
-              </q-item>
-              <q-item>
-                <div class="tag-label-wrapper q-gutter-xs">
-                  <q-chip square removable size="sm" v-for="(ext,index) in activePlatformInfo.RomExts"
+            <q-card flat bordered class="config-section">
+              <q-card-section>
+                <div class="section-title">{{ lang.menuConfig }}</div>
+                <div class="row q-col-gutter-md">
+                  <div class="col-12">
+                    <q-input filled square :label="lang.platformResDir" class="open-dialog"
+                             v-model="activePlatformInfo.RootPath">
+                      <template v-slot:append>
+                        <q-icon name="create_new_folder" @click="openDirectoryDialog('root')"/>
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="col-12">
+                    <q-input filled square :label="lang.romDir" class="open-dialog"
+                             v-model="activePlatformInfo.RomPath">
+                      <template v-slot:append>
+                        <q-icon name="create_new_folder" @click="openDirectoryDialog('rom')"/>
+                      </template>
+                      <q-tooltip>{{ lang.tipRomDir }}</q-tooltip>
+                    </q-input>
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
+
+            <q-card flat bordered class="config-section">
+              <q-card-section>
+                <div class="section-title">{{ lang.romExt }}</div>
+                <div class="row q-col-gutter-md items-center">
+                  <div class="col">
+                    <q-input filled square :label="lang.romExt"
+                             v-model="addExtInput" @keydown.enter="addExt">
+                      <template v-slot:append>
+                        <q-btn round flat icon="add" @click="addExt"/>
+                      </template>
+                      <q-tooltip>{{ lang.tipRomExt }}</q-tooltip>
+                    </q-input>
+                  </div>
+                  <div class="col-auto ext-actions">
+                    <q-btn unelevated icon="assignment" @click="addNoExt()">
+                      <q-tooltip>添加无扩展名支持</q-tooltip>
+                    </q-btn>
+                    <q-btn flat icon="delete" @click="clearRomExts()">
+                      <q-tooltip>删除所有类型</q-tooltip>
+                    </q-btn>
+                  </div>
+                </div>
+                <div class="tag-label-wrapper q-gutter-sm q-mt-md">
+                  <q-chip square removable v-for="(ext,index) in activePlatformInfo.RomExts"
                           @remove="removeExt(ext,index)">
                     {{ ext }}
                   </q-chip>
                 </div>
-              </q-item>
-            </q-list>
-            <div class="q-gutter-sm bottom-bar">
-              <q-btn flat square :label="lang.update" size="lg" padding="md" color="primary" @click="updatePlatform()"/>
+              </q-card-section>
+            </q-card>
+
+            <div class="bottom-bar">
+              <q-btn unelevated :label="lang.update" color="primary" class="update-btn" @click="updatePlatform()"/>
             </div>
           </q-tab-panel>
 
           <!-- 模拟器管理 -->
-          <q-tab-panel name="simulator">
+          <q-tab-panel name="simulator" class="config-panel">
             <simulators :platform="activePlatformId"/>
           </q-tab-panel>
 
           <!-- 平台简介 -->
-          <q-tab-panel name="desc">
-            <q-banner dense class="bg-grey-9 text-white">
-              <div class="editor-desc">
-                <q-badge outline align="middle" color="grey" label="ctrl" class="badge"/>
-                <span>+</span>
-                <q-badge outline align="middle" color="grey" label="shift" class="badge"/>
-                <span>+</span>
-                <q-badge outline align="middle" color="grey" label="v" class="badge"/>
-                <span>{{ lang.pastePlainText }}</span>
-              </div>
-            </q-banner>
-            <q-editor class="editor" square v-model="activePlatformInfo.Desc"
-                      :definitions="editorDefinitions" :toolbar="EDITOR_TOOLBAR"/>
-            <div class="q-gutter-sm bottom-bar">
-              <q-btn flat square :label="lang.update" size="lg" padding="md" color="primary" @click="updateDesc()"/>
+          <q-tab-panel name="desc" class="config-panel">
+            <q-card flat bordered class="config-section editor-section">
+              <q-card-section class="editor-tip">
+                <div class="editor-desc">
+                  <q-badge outline align="middle" color="grey" label="ctrl" class="badge"/>
+                  <span>+</span>
+                  <q-badge outline align="middle" color="grey" label="shift" class="badge"/>
+                  <span>+</span>
+                  <q-badge outline align="middle" color="grey" label="v" class="badge"/>
+                  <span>{{ lang.pastePlainText }}</span>
+                </div>
+              </q-card-section>
+              <q-separator/>
+              <q-card-section class="q-pa-none">
+                <q-editor class="editor" square v-model="activePlatformInfo.Desc"
+                          :definitions="editorDefinitions" :toolbar="EDITOR_TOOLBAR"/>
+              </q-card-section>
+            </q-card>
+            <div class="bottom-bar">
+              <q-btn unelevated :label="lang.update" color="primary" class="update-btn" @click="updateDesc()"/>
             </div>
           </q-tab-panel>
-          <q-tab-panel name="rombase">
+          <q-tab-panel name="rombase" class="config-panel">
             <rombase-alias :platform="activePlatformId"/>
           </q-tab-panel>
         </q-tab-panels>
       </div>
       <div v-else class="col right-wrapper relative-position">
-        <div class="absolute-full flex flex-center">{{ lang.tipSelectPlatform }}</div>
+        <div class="empty-state absolute-full flex flex-center column">
+          <q-icon name="videogame_asset" size="64px" color="grey-7"/>
+          <div class="empty-text">{{ lang.tipSelectPlatform }}</div>
+        </div>
       </div>
     </div>
   </div>

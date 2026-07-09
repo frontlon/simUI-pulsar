@@ -27,7 +27,7 @@
                   </template>
                 </q-img>
                 <q-card-section v-if="!platformUi.BlockHideTitle" class="module-title"
-                                :style="{'background':platformUi.BlockHideBackground ?'none' : ''}">
+                                :style="{...getTitleBorderStyle(platformUi), background: platformUi.BlockHideBackground ? 'none' : ''}">
                   {{ platformUi.NameType == 1 ? item.Name : item.RomName }}
                 </q-card-section>
               </q-card>
@@ -62,7 +62,7 @@
 <script lang="ts">
 import 'animate.css'
 import {ref, watch} from 'vue';
-import {decodeApiData, getTimestamp, isEmpty} from "components/utils";
+import {decodeApiData, getTimestamp, getTitleBorderStyle, isEmpty} from "components/utils";
 import {useGlobalStore} from 'stores/globalData';
 import {storeToRefs} from 'pinia';
 import {GetGameCount, GetGameList} from "app/wailsjs/go/controller/Controller";
@@ -442,6 +442,7 @@ export default {
       menuLike,
       platformUi,
       callbackOpts,
+      getTitleBorderStyle,
       items,
       rating,
       listColumns,

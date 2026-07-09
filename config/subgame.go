@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"simUI/db"
 	"simUI/utils"
 )
@@ -25,13 +26,20 @@ func GetSubGame(platform uint32, build bool) (map[string]string, error) {
 	section := map[string]string{}
 
 	if !utils.FileExists(platformInfo.SubGameFile) {
+		SubGameList[platform] = section
 		return section, nil
 	}
-	content, _ := utils.ReadFile(platformInfo.SubGameFile, false)
-	if content != "" {
-		json.Unmarshal([]byte(content), &section)
-		SubGameList[platform] = section
+	content, err := utils.ReadFile(platformInfo.SubGameFile, false)
+	if err != nil {
+		return section, err
 	}
+
+	if content != "" {
+		if err := json.Unmarshal([]byte(content), &section); err != nil {
+			return section, errors.New("subgame.json parse error: " + err.Error())
+		}
+	}
+	SubGameList[platform] = section
 	return section, nil
 }
 
@@ -52,42 +60,37 @@ func GetSubGameByParent(platform uint32, romName string) ([]string, error) {
 
 // 设置子游戏
 func SetSubGame(platform uint32, slave, master string) error {
-	if len(SubGameList) == 0 {
-		SubGameList = map[uint32]map[string]string{}
+	subgame, err := GetSubGame(platform, true)
+	if err != nil {
+		return err
 	}
-	if len(SubGameList[platform]) == 0 {
-		SubGameList[platform] = map[string]string{}
-	}
-	SubGameList[platform][slave] = master
+	subgame[slave] = master
 
 	platformInfo := (&db.Platform{}).GetVOById(platform, false)
 
-	return WriteDataToSubGameFile(platformInfo.SubGameFile, SubGameList[platform])
+	return WriteDataToSubGameFile(platformInfo.SubGameFile, subgame)
 }
 
 // 删除子游戏
 func DelSubGame(platform uint32, slave string) error {
-	if len(SubGameList) == 0 {
-		SubGameList = map[uint32]map[string]string{}
-	}
-	if len(SubGameList[platform]) == 0 {
-		SubGameList[platform] = map[string]string{}
+	subgame, err := GetSubGame(platform, true)
+	if err != nil {
+		return err
 	}
 
-	if _, ok := SubGameList[platform][slave]; !ok {
+	if _, ok := subgame[slave]; !ok {
 		return nil
 	}
 
-	delete(SubGameList[platform], slave)
+	delete(subgame, slave)
 
 	platformInfo := (&db.Platform{}).GetVOById(platform, false)
 
-	return WriteDataToSubGameFile(platformInfo.SubGameFile, SubGameList[platform])
+	return WriteDataToSubGameFile(platformInfo.SubGameFile, subgame)
 }
 
 // 覆写子游戏配置
 func WriteDataToSubGameFile(filePath string, data map[string]string) error {
 	content, _ := json.Marshal(data)
-	utils.OverlayWriteFile(filePath, string(content))
-	return nil
+	return utils.OverlayWriteFile(filePath, string(content))
 }

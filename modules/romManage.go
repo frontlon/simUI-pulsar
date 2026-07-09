@@ -226,35 +226,56 @@ func BindSubGame(pid uint64, sid uint64) error {
 		return errors.New(config.Cfg.Lang["subGameNotFound"])
 	}
 
+	if slave.Platform != master.Platform {
+		return errors.New(config.Cfg.Lang["subGameNotFound"])
+	}
+
+	if slave.Pid != "" {
+		return errors.New(config.Cfg.Lang["subGameMasterExists"])
+	}
+
 	//检查这个子游戏是否被绑定其他子游戏，已有子游戏的rom不能绑定
 	subRoms, _ := (&db.Rom{}).GetSubRom(slave.Platform, slave.RomName)
 	if len(subRoms) > 0 {
 		return errors.New(config.Cfg.Lang["subGameExists"])
 	}
 
-	//更新数据库
-	if (&db.Rom{}).UpdatePidByRomName(master.Platform, slave.RomName, master.RomName) != nil {
+	if err := config.SetSubGame(slave.Platform, slave.RomName, master.RomName); err != nil {
 		return err
 	}
 
-	//更新子游戏配置文件
-	_ = config.SetSubGame(slave.Platform, slave.RomName, master.RomName)
+	slave.Pid = master.RomName
+	slave.InfoMd5 = slave.CreateInfoMd5()
+	if err := (&db.Rom{}).UpdatePidAndInfoMd5(slave.Platform, slave.RomName, slave.Pid, slave.InfoMd5); err != nil {
+		_ = config.DelSubGame(slave.Platform, slave.RomName)
+		return err
+	}
 
 	return nil
 }
 
 // 解绑子游戏
 func UnBindSubGame(id uint64) error {
-	//读取子游戏数据
 	vo, err := (&db.Rom{}).GetById(id)
+	if err != nil {
+		return errors.New(config.Cfg.Lang["subGameNotFound"])
+	}
 
-	//更新数据库
-	if (&db.Rom{}).UpdatePidByRomName(vo.Platform, vo.RomName, "") != nil {
+	oldPid := vo.Pid
+	if oldPid == "" {
+		return nil
+	}
+
+	if err := config.DelSubGame(vo.Platform, vo.RomName); err != nil {
 		return err
 	}
 
-	//更新子游戏配置文件
-	_ = config.DelSubGame(vo.Platform, vo.RomName)
+	vo.Pid = ""
+	vo.InfoMd5 = vo.CreateInfoMd5()
+	if err := (&db.Rom{}).UpdatePidAndInfoMd5(vo.Platform, vo.RomName, "", vo.InfoMd5); err != nil {
+		_ = config.SetSubGame(vo.Platform, vo.RomName, oldPid)
+		return err
+	}
 
 	return nil
 }

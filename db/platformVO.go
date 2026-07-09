@@ -62,6 +62,9 @@ type PlatformUIDefault struct {
 	BlockClickAnimate   string         // 模块点击动画
 	BlockHideTitle      uint8          // 是否隐藏标题
 	BlockHideBackground uint8          // 是否隐藏模块背景
+	BlockTitleBorderType  string       // 标题边框类型(""无;"shadow"阴影;"border"边框)
+	BlockTitleBorderColor string       // 标题边框颜色
+	BlockTitleBorderSize  uint8        // 标题边框大小(px)
 	RomListStyle        uint8          // 当前列表样式(1:模块;2:表格)
 	RomListColumn       []string       // 列表模式显示哪些列
 	BackgroundImage     string         // 背景图片
@@ -82,6 +85,9 @@ type PlatformUIPlaynite struct {
 	BlockDirection      uint8          // 模块显示方向（0自动、1横向、2竖向）
 	BlockHideTitle      uint8          // 是否隐藏标题
 	BlockHideBackground uint8          // 是否隐藏模块背景
+	BlockTitleBorderType  string       // 标题边框类型(""无;"shadow"阴影;"border"边框)
+	BlockTitleBorderColor string       // 标题边框颜色
+	BlockTitleBorderSize  uint8        // 标题边框大小(px)
 	BackgroundImage     string         // 背景图片
 	BackgroundRepeat    string         // 背景循环方式
 	BackgroundFuzzy     uint8          // 背景模糊级别
@@ -91,9 +97,12 @@ type PlatformUIPlaynite struct {
 }
 
 type PlatformUITiny struct {
-	NameType         uint8          // 显示名称类型(1:别名;2:文件名)
-	RomSort          uint8          // rom列表排序方式
-	BlockThumbType   string         // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
+	NameType              uint8          // 显示名称类型(1:别名;2:文件名)
+	RomSort               uint8          // rom列表排序方式
+	BlockTitleBorderType  string         // 标题边框类型(""无;"shadow"阴影;"border"边框)
+	BlockTitleBorderColor string         // 标题边框颜色
+	BlockTitleBorderSize  uint8          // 标题边框大小(px)
+	BlockThumbType        string         // 当前缩略图显示哪个模块(Thumb,Snap,Title等)
 	BackgroundImage  string         // 背景图片
 	BackgroundFuzzy  uint8          // 背景模糊级别
 	BackgroundMask   string         // 背景遮罩图

@@ -3,11 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"github.com/wailsapp/wails/v2"
-	"github.com/wailsapp/wails/v2/pkg/logger"
-	"github.com/wailsapp/wails/v2/pkg/options"
-	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -19,6 +14,12 @@ import (
 	"simUI/modules"
 	"simUI/utils"
 	"strings"
+
+	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/logger"
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
 //go:embed all:frontend/dist
@@ -39,7 +40,7 @@ func main() {
 	}
 
 	rootpath = utils.ReplcePathSeparator(rootpath)
-	constant.VERSION_NO = "1.0.2"                                  //当前版本id
+	constant.VERSION_NO = "1.0.3"                                  //当前版本id
 	constant.BUILD_TIME = ""                                       //软件编译时间
 	constant.ROOT_PATH = rootpath + "/"                            //当前软件的绝对路径
 	constant.LANG_PATH = rootpath + "/language/"                   //语言目录

@@ -32,7 +32,7 @@
                 </q-img>
 
                 <q-card-section v-if="!platformUi.BlockHideTitle" class="module-title"
-                                :style="{'background':platformUi.BlockHideBackground ?'none' : ''}">
+                                :style="{...getTitleBorderStyle(platformUi), background: platformUi.BlockHideBackground ? 'none' : ''}">
                   {{ platformUi.NameType == 1 ? item.Name : item.RomName }}
                 </q-card-section>
               </q-card>
@@ -54,7 +54,7 @@
                 <q-img v-if="item.ThumbPic" :src="item.ThumbPic" loading="lazy" fit="contain"
                        :class="'img-direction-'+platformUi.BlockDirection">
                   <div class="absolute-bottom text-center" v-if="!platformUi.BlockHideTitle"
-                       :style="{'padding':'10px 0','color':'var(--color-text)','background':platformUi.BlockHideBackground ?'none' : ''}">
+                       :style="{...getTitleBorderStyle(platformUi), padding: '10px 0', color: 'var(--color-text)', background: platformUi.BlockHideBackground ? 'none' : ''}">
                     {{ platformUi.NameType == 1 ? item.Name : item.RomName }}
                   </div>
                   <template v-slot:error>
@@ -101,7 +101,7 @@
                 <q-card-section>
                   <div class="row no-wrap items-center">
                     <div class="col" v-if="!platformUi.BlockHideTitle"
-                         :style="{'background':platformUi.BlockHideBackground ?'none' : ''}">
+                         :style="{...getTitleBorderStyle(platformUi), background: platformUi.BlockHideBackground ? 'none' : ''}">
                       {{ platformUi.NameType == 1 ? item.Name : item.RomName }}
                     </div>
                   </div>
@@ -177,14 +177,14 @@
 </template>
 <script lang="ts">
 
-import {ref, watch} from 'vue';
+import {nextTick, ref, watch} from 'vue';
 import ContentContext, {keybordOpenWin, showContextMenu} from 'pages/classic/context/Context.vue';
 import FabMenu, {openManageMenuDialog} from 'pages/classic/modules/FabMenu.vue';
 import FabInputRom, {openInputDialog} from 'pages/classic/modules/FabInputRom.vue';
 import FabOutputRom, {openOutputDialog} from 'pages/classic/modules/FabOutputRom.vue';
 
 import 'animate.css'
-import {decodeApiData, deepClone, firstLetterToLower, isEmpty, loading, notify} from "components/utils";
+import {decodeApiData, deepClone, firstLetterToLower, getTitleBorderStyle, isEmpty, loading, notify} from "components/utils";
 import {useGlobalStore} from 'stores/globalData';
 import {storeToRefs} from 'pinia';
 import {CreateRomCache, GetGameCount, GetGameList, RunGame} from "app/wailsjs/go/controller/Controller";
@@ -246,8 +246,8 @@ watch([romState], async(newValue, oldValue) => {
   pageEnd = false;
   pageNum = 0;
   //滚动条回到最顶端
-  scrollAreaRef.value.setScrollPosition("vertical", 0)
 
+  scrollAreaRef.value.setScrollPosition("vertical", 0)
   var req = {
     "theme": theme.value,
     "platform": activePlatform.value,
@@ -270,7 +270,6 @@ watch([romState], async(newValue, oldValue) => {
 
   var request = JSON.stringify(req);
   let result = await GetGameList(request)
-
   let resp = decodeApiData(result)
   items.value = resp.data;
 
@@ -347,22 +346,8 @@ watch(callbackOpts, (newValue: any, oldValue) => {
   }
 })
 
-function nextPage(index: number, done: any) {
-  if (pageEnd) {
-    done();
-    return;
-  }
-
-  console.log("pageNum", pageNum)
-
-  //启动时第一页不加载
-  if (pageNum == 0) {
-    pageNum++;
-    done();
-    return;
-  }
-
-  let req = {
+function buildGameListRequest() {
+  return {
     "theme": theme.value,
     "platform": activePlatform.value,
     "catname": activeMenu.value,
@@ -381,28 +366,97 @@ function nextPage(index: number, done: any) {
     "simpleModel": "simple",
     "letter": activeLetter.value == "ALL" ? "" : activeLetter.value,
   };
-  var request = JSON.stringify(req);
-  GetGameList(request).then((result: string) => {
-    let resp = decodeApiData(result)
-    console.log(resp.data)
+}
+
+function loadNextRomPage(): Promise<boolean> {
+  if (pageEnd) {
+    return Promise.resolve(false)
+  }
+
+  //启动时第一页不加载
+  if (pageNum == 0) {
+    pageNum++
+    return Promise.resolve(true)
+  }
+
+  const request = JSON.stringify(buildGameListRequest())
+  return GetGameList(request).then((result: string) => {
+    const resp = decodeApiData(result)
     if (resp.data.length > 0) {
       items.value = items.value.concat(resp.data)
+      pageNum++
+      GetGameCount(request).then((countResult: string) => {
+        const countResp = decodeApiData(countResult)
+        romCount.value = countResp.data
+      })
+      return true
+    }
+    pageEnd = true
+    return false
+  })
+}
+
+function nextPage(index: number, done: any) {
+  if (pageEnd) {
+    done();
+    return;
+  }
+
+  console.log("pageNum", pageNum)
+
+  loadNextRomPage().then((loaded) => {
+    if (loaded) {
       setTimeout(function () {
-        pageNum++;
         done()
       }, 1000);
     } else {
       console.log("pageEnd")
-      pageEnd = true;
       done();
     }
-
   })
-  GetGameCount(request).then((result: string) => {
-    let resp = decodeApiData(result)
-    romCount.value = resp.data;
-  })
+}
 
+function scrollRomIntoView(index: number) {
+  const scrollArea = scrollAreaRef.value
+  if (!scrollArea) {
+    return
+  }
+
+  const ele = document.getElementById('ele' + index)
+  if (!ele) {
+    return
+  }
+
+  const container = scrollArea.getScrollTarget()
+  if (!container) {
+    return
+  }
+
+  const containerRect = container.getBoundingClientRect()
+  const eleRect = ele.getBoundingClientRect()
+  const scrollPos = scrollArea.getScrollPosition()
+  const padding = 16
+  let newScrollTop = scrollPos.top
+  let newScrollLeft = scrollPos.left
+
+  if (eleRect.top < containerRect.top + padding) {
+    newScrollTop += eleRect.top - containerRect.top - padding
+  } else if (eleRect.bottom > containerRect.bottom - padding) {
+    newScrollTop += eleRect.bottom - containerRect.bottom + padding
+  }
+
+  if (eleRect.left < containerRect.left + padding) {
+    newScrollLeft += eleRect.left - containerRect.left - padding
+  } else if (eleRect.right > containerRect.right - padding) {
+    newScrollLeft += eleRect.right - containerRect.right + padding
+  }
+
+  if (newScrollTop !== scrollPos.top) {
+    scrollArea.setScrollPosition('vertical', Math.max(0, newScrollTop), 150)
+  }
+  if (newScrollLeft !== scrollPos.left) {
+    scrollArea.setScrollPosition('horizontal', Math.max(0, newScrollLeft), 150)
+  }
 }
 
 //运行游戏
@@ -423,8 +477,24 @@ function changeLetter(letter: string) {
   global.incRomState()
 }
 
+async function focusRomAtIndex(newIndex: number) {
+  let ele = document.getElementById('ele' + newIndex)
+  if (ele == null && items.value.length > 0) {
+    newIndex = items.value.length - 1
+    ele = document.getElementById('ele' + newIndex)
+  }
+  if (ele == null) {
+    return
+  }
+
+  activeFocus.value = [focusType, newIndex]
+  ele.click()
+  await nextTick()
+  scrollRomIntoView(newIndex)
+}
+
 //键盘方向键
-export function romEventKeyboard(direction: string) {
+export async function romEventKeyboard(direction: string) {
 
   let newIndex = 0;
 
@@ -440,6 +510,9 @@ export function romEventKeyboard(direction: string) {
   }
 
   let currFocus = activeFocus.value[1];
+  if (currFocus < 0) {
+    currFocus = 0
+  }
 
   switch (direction) {
     case "ArrowUp":
@@ -463,22 +536,25 @@ export function romEventKeyboard(direction: string) {
       newIndex = currFocus + 1
       break;
   }
-  console.log("-=-=-=-", currFocus)
 
-  let ele = document.getElementById('ele' + newIndex);
-  if (isEmpty(ele)) {
+  let ele = document.getElementById('ele' + newIndex)
+  if (ele == null && !pageEnd && newIndex >= items.value.length
+      && (direction === 'ArrowDown' || direction === 'ArrowRight')) {
+    while (newIndex >= items.value.length && !pageEnd) {
+      const loaded = await loadNextRomPage()
+      if (!loaded) {
+        break
+      }
+      await nextTick()
+    }
+    ele = document.getElementById('ele' + newIndex)
+  }
+
+  if (ele == null) {
     return
   }
 
-  activeFocus.value = [focusType, newIndex]
-
-  if (platformUi.value.RomListStyle == 4) {
-    //列表模式点击
-    ele?.click()
-  } else {
-    ele?.focus()
-  }
-
+  await focusRomAtIndex(newIndex)
 }
 
 //事件点击游戏
@@ -564,6 +640,7 @@ export default {
       menuLike,
       platformUi,
       callbackOpts,
+      getTitleBorderStyle,
       items,
       rating,
       listColumns,

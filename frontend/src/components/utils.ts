@@ -27,9 +27,12 @@ export function isEmpty(data: any) {
         case "object":
             if (Array.isArray(data)) { //数组
                 return data.length == 0
-            } else { //对象
-                return Object.keys(data).length == 0
             }
+            // DOM 元素没有可枚举自有属性，不能按空对象处理
+            if (typeof Element !== 'undefined' && data instanceof Element) {
+                return false
+            }
+            return Object.keys(data).length == 0
     }
     return true
 }
@@ -110,6 +113,27 @@ export function getGradientColors(rgbString: string) {
     }
 
     return gradientColors;
+}
+
+// 模块标题边框/阴影样式
+export function getTitleBorderStyle(platformUi: any) {
+    if (!platformUi || !platformUi.BlockTitleBorderType) {
+        return {}
+    }
+    const color = platformUi.BlockTitleBorderColor || '#000000'
+    const size = platformUi.BlockTitleBorderSize || 2
+    if (platformUi.BlockTitleBorderType === 'shadow') {
+        return {
+            textShadow: `0 0 ${size}px ${color}, 0 0 ${size * 2}px ${color}`
+        }
+    }
+    if (platformUi.BlockTitleBorderType === 'border') {
+        return {
+            WebkitTextStroke: `${size}px ${color}`,
+            paintOrder: 'stroke fill'
+        }
+    }
+    return {}
 }
 
 export function getDate(timestamp: number) {

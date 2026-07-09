@@ -40,6 +40,12 @@ export const titleOptions = [
   {label: lang.value.filename, value: 2}, //文件名
 ];
 
+export const titleBorderTypeOptions = [
+  {label: lang.value.none, value: ''},
+  {label: lang.value.titleBorderShadow, value: 'shadow'},
+  {label: lang.value.titleBorderBorder, value: 'border'},
+];
+
 export const backgroundRepeatOptions = [
   {value: 'cover', label: lang.value.cover},
   {value: 'repeat', label: lang.value.repeat},

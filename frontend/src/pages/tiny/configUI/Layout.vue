@@ -98,6 +98,33 @@
       </q-list>
     </div>
 
+    <div v-if="activeUi">
+      <h6>{{ lang.moduleConfig }}</h6>
+      <q-list>
+        <q-item>
+          <q-item-section>
+            <q-select filled square dense options-dense emit-value map-options :options="titleBorderTypeOptions"
+                      v-model="activeUi.BlockTitleBorderType" :label="lang.blockTitleBorder"/>
+          </q-item-section>
+          <q-item-section v-if="activeUi.BlockTitleBorderType">
+            <q-input filled square dense :label="lang.blockTitleBorderColor" v-model="activeUi.BlockTitleBorderColor">
+              <template v-slot:append>
+                <q-icon name="colorize" class="cursor-pointer">
+                  <q-popup-proxy>
+                    <q-color v-model="activeUi.BlockTitleBorderColor" no-header/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </q-item-section>
+          <q-item-section v-if="activeUi.BlockTitleBorderType">
+            <q-input filled square dense type="number" min="1" max="20"
+                      :label="lang.blockTitleBorderSize" v-model.number="activeUi.BlockTitleBorderSize" suffix="px"/>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
+
     <div class="q-gutter-sm bottom-bar">
       <q-btn flat square :label="lang.update" size="lg" padding="md" color="primary" @click="updatePlatfirmUi()"/>
     </div>
@@ -129,6 +156,7 @@ import {
   sortOptions,
   thumbOptions,
   titleOptions,
+  titleBorderTypeOptions,
 } from 'src/pages/tiny/configUI/UiConst.vue';
 
 const global = useGlobalStore();

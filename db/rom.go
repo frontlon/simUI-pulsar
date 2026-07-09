@@ -722,6 +722,76 @@ func (m *Rom) UpdatePidByRomName(platform uint32, romName, newName string) error
 	return result.Error
 }
 
+// 更新子游戏绑定及 info_md5，保持与 CreateInfoMd5 一致
+func (m *Rom) UpdatePidAndInfoMd5(platform uint32, romName, pid, infoMd5 string) error {
+	result := getDb().Table(m.TableName()).Where("platform = ? AND rom_name = ?", platform, romName).Updates(map[string]interface{}{
+		"pid":      pid,
+		"info_md5": infoMd5,
+	})
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+// 重建缓存时按 id 更新 ROM 记录（保留原 id，同步 pid 等字段）
+func (m *Rom) UpdateFromCache() error {
+	data := map[string]interface{}{
+		"pid":            m.Pid,
+		"menu":           m.Menu,
+		"name":           m.Name,
+		"link_file":      m.LinkFile,
+		"rom_name":       m.RomName,
+		"hide":           m.Hide,
+		"favorite":       m.Favorite,
+		"size":           m.Size,
+		"run_num":        m.RunNum,
+		"run_lasttime":   m.RunLasttime,
+		"score":          m.Score,
+		"complete":       m.Complete,
+		"sim_id":         m.SimId,
+		"base_type":      m.BaseType,
+		"base_year":      m.BaseYear,
+		"base_producer":  m.BaseProducer,
+		"base_publisher": m.BasePublisher,
+		"base_country":   m.BaseCountry,
+		"base_translate": m.BaseTranslate,
+		"base_version":   m.BaseVersion,
+		"base_name_en":   m.BaseNameEn,
+		"base_name_jp":   m.BaseNameJp,
+		"base_other_a":   m.BaseOtherA,
+		"base_other_b":   m.BaseOtherB,
+		"base_other_c":   m.BaseOtherC,
+		"base_other_d":   m.BaseOtherD,
+		"pinyin":         m.Pinyin,
+		"info_md5":       m.InfoMd5,
+		"sim_setting":    m.SimSetting,
+	}
+	result := getDb().Table(m.TableName()).Where("id = ?", m.Id).Updates(data)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+// 批量更新缓存 ROM
+func (*Rom) BatchUpdateFromCache(romlist []*Rom) {
+	for _, v := range romlist {
+		_ = v.UpdateFromCache()
+	}
+}
+
+// 按 id 批量删除
+func (m *Rom) DeleteByIds(ids []uint64) {
+	if len(ids) == 0 {
+		return
+	}
+	result := getDb().Where("id in (?)", ids).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+}
+
 // 解绑一个游戏的所有子游戏
 func (m *Rom) UpdatePidByPid(platform uint32, oldPid, newPid string) error {
 	result := getDb().Table(m.TableName()).Where("platform = ? AND pid = ?", platform, oldPid).Update("pid", newPid)

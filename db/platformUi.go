@@ -76,6 +76,14 @@ func (m *Platform) SetUiDefaultDefault(data PlatformUIDefault) PlatformUIDefault
 		}
 	}
 
+	if data.BlockTitleBorderColor == "" {
+		data.BlockTitleBorderColor = "#000000"
+	}
+
+	if data.BlockTitleBorderSize == 0 {
+		data.BlockTitleBorderSize = 2
+	}
+
 	return data
 }
 func (m *Platform) SetUiDefaultPlaynite(data PlatformUIPlaynite) PlatformUIPlaynite {
@@ -133,6 +141,14 @@ func (m *Platform) SetUiDefaultPlaynite(data PlatformUIPlaynite) PlatformUIPlayn
 		}
 	}
 
+	if data.BlockTitleBorderColor == "" {
+		data.BlockTitleBorderColor = "#000000"
+	}
+
+	if data.BlockTitleBorderSize == 0 {
+		data.BlockTitleBorderSize = 2
+	}
+
 	return data
 }
 func (m *Platform) SetUiDefaultTiny(data PlatformUITiny) PlatformUITiny {
@@ -174,6 +190,14 @@ func (m *Platform) SetUiDefaultTiny(data PlatformUITiny) PlatformUITiny {
 		}
 	}
 
+	if data.BlockTitleBorderColor == "" {
+		data.BlockTitleBorderColor = "#000000"
+	}
+
+	if data.BlockTitleBorderSize == 0 {
+		data.BlockTitleBorderSize = 2
+	}
+
 	return data
 }
 
@@ -199,8 +223,11 @@ func (m *Platform) UpdateUiDefaultById(id uint32, data PlatformUIDefault) error 
 		BackgroundRepeat:    data.BackgroundRepeat,
 		BackgroundFuzzy:     data.BackgroundFuzzy,
 		BackgroundMask:      data.BackgroundMask,
-		BlockHideTitle:      data.BlockHideTitle,
-		BlockHideBackground: data.BlockHideBackground,
+		BlockHideTitle:        data.BlockHideTitle,
+		BlockHideBackground:   data.BlockHideBackground,
+		BlockTitleBorderType:  data.BlockTitleBorderType,
+		BlockTitleBorderColor: data.BlockTitleBorderColor,
+		BlockTitleBorderSize:  data.BlockTitleBorderSize,
 	}
 
 	create, _ := json.Marshal(oldUi)

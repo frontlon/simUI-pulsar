@@ -35,7 +35,7 @@
               </q-item-section>
               <q-item-section>
                 <div class="rom-title" @dblclick="openRunGameDialog()">
-                  <div class="master-title">{{ platformUi.NameType == 1 ? item.Name : item.RomName }}</div>
+                  <div class="master-title" :style="getTitleBorderStyle(platformUi)">{{ platformUi.NameType == 1 ? item.Name : item.RomName }}</div>
                   <div class="sub-title">{{ item.subTitle }}</div>
                 </div>
               </q-item-section>
@@ -97,7 +97,7 @@
 <script lang="ts">
 import 'animate.css'
 import {ref, watch} from 'vue';
-import {decodeApiData, getTimestamp, isEmpty} from "components/utils";
+import {decodeApiData, getTimestamp, getTitleBorderStyle, isEmpty} from "components/utils";
 import {useGlobalStore} from 'stores/globalData';
 import {storeToRefs} from 'pinia';
 import {
@@ -696,6 +696,7 @@ export default {
       menuLike,
       platformUi,
       callbackOpts,
+      getTitleBorderStyle,
       items,
       detail,
       detailIndex,

@@ -1,24 +1,31 @@
 <template>
-  <q-list class="shortcut-list">
-    <q-item v-for="(item,index) in shortcuts" :key="item.Id">
-      <q-item-section>
-        <q-input filled square dense :label="lang.shortcutName" v-model="item.Name"/>
-      </q-item-section>
-      <q-item-section>
-        <q-input filled square dense :label="lang.shortcutPath" v-model="item.Path">
-          <template v-slot:append>
-            <q-icon name="upload_file" class="open-dialog" @click="openFileDialog(index)"/>
-          </template>
-        </q-input>
-      </q-item-section>
-      <q-item-section side>
-        <q-btn flat square dense icon="delete" @click="delShortcut(index)"/>
-      </q-item-section>
-    </q-item>
-  </q-list>
-  <div class="q-gutter-sm bottom-bar">
-    <q-btn flat square :label="lang.add" size="lg" padding="md" color="primary" @click="addShortcut()"/>
-    <q-btn flat square :label="lang.update" size="lg" padding="md" color="primary" @click="updateShortcut()"/>
+  <q-card flat bordered class="config-section">
+    <q-card-section>
+      <div class="section-title">{{ lang.shortcut }}</div>
+
+      <q-list v-if="shortcuts.length > 0" class="shortcut-list">
+        <q-item v-for="(item,index) in shortcuts" :key="item.Id ?? index" class="shortcut-item">
+          <q-item-section>
+            <q-input filled square :label="lang.shortcutName" v-model="item.Name"/>
+          </q-item-section>
+          <q-item-section>
+            <q-input filled square :label="lang.shortcutPath" v-model="item.Path">
+              <template v-slot:append>
+                <q-icon name="upload_file" class="open-dialog" @click="openFileDialog(index)"/>
+              </template>
+            </q-input>
+          </q-item-section>
+          <q-item-section side>
+            <q-btn flat icon="delete" @click="delShortcut(index)"/>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card-section>
+  </q-card>
+
+  <div class="bottom-bar">
+    <q-btn unelevated :label="lang.add" color="primary" outline @click="addShortcut()"/>
+    <q-btn unelevated :label="lang.update" color="primary" class="update-btn" @click="updateShortcut()"/>
   </div>
 </template>
 
@@ -32,27 +39,22 @@ import {storeToRefs} from "pinia";
 
 const global = useGlobalStore();
 const {lang} = storeToRefs(global);
-const config = ref(null)
 const shortcuts: any = ref([])
 
 
 onMounted(() => {
-  //读取快捷工具
   GetShortcuts(false).then((result: string) => {
     let resp = decodeApiData(result)
     shortcuts.value = resp.data;
   })
 
-  //快捷工具排序
   shortcutDropSort()
 })
 
-//添加快捷工具
 function addShortcut() {
   shortcuts.value.push({})
 }
 
-//更新快捷工具
 function updateShortcut() {
   UpdateShortcut(JSON.stringify(shortcuts.value)).then((result: string) => {
     let resp = decodeApiData(result)
@@ -64,12 +66,10 @@ function updateShortcut() {
   })
 }
 
-//删除快捷工具
 function delShortcut(idx: number) {
   shortcuts.value.splice(idx, 1)
 }
 
-//选择文件
 function openFileDialog(index: number) {
   OpenFileDialog("app").then((result: string) => {
     let resp = decodeApiData(result)
@@ -79,25 +79,23 @@ function openFileDialog(index: number) {
   })
 }
 
-//快捷软件拖拽排序
 function shortcutDropSort() {
   const el = document.querySelectorAll('.shortcut-list')[0] as HTMLElement;
+  if (!el) return;
   Sortable.create(el, {
     animation: 150,
     sort: true,
     disabled: false,
-    // 结束拖拽后的回调函数
     onEnd: (evt: any) => {
       let currentRow = shortcuts.value.splice(evt.oldIndex, 1)[0];
       shortcuts.value.splice(evt.newIndex, 0, currentRow);
-      //更新数据
       let req: any = [];
       shortcuts.value.forEach((item, index) => {
         shortcuts.value[index].Sort = index + 1
         req.push(item.Id);
       });
 
-      UpdateShortcutSort(JSON.stringify(req)).then((result: string) => {
+      UpdateShortcutSort(JSON.stringify(req)).then(() => {
       })
     },
   });
@@ -105,5 +103,5 @@ function shortcutDropSort() {
 
 </script>
 <style scoped>
-@import "src/css/manage.css";
+@import "src/css/page/config.css";
 </style>

@@ -1,56 +1,178 @@
+/* 平台配置页 — 覆盖 manage-wrapper 的 60% 窄宽限制 */
+.platform-config.manage-wrapper {
+    max-width: min(1280px, 92vw);
+    margin: 0 auto;
+    padding: 0 16px 24px;
+}
+
+.platform-config .page-header {
+    padding: 8px 0 16px;
+}
+
+.platform-config .page-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.platform-layout {
+    gap: 16px;
+    min-height: calc(100vh - 120px);
+}
+
 .left-wrapper {
-    min-height: 500px;
+    width: 260px;
+    min-height: 560px;
     background: var(--color-2);
-    margin-right: 10px;
+    border: 1px solid var(--color-3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 16px;
+}
+
+.sidebar-actions {
+    margin-bottom: 12px;
 }
 
 .platform-scroll {
-    height: 500px;
+    flex: 1;
+    height: calc(100vh - 260px);
+    min-height: 400px;
 }
 
 .right-wrapper {
     background: var(--color-2);
+    border: 1px solid var(--color-3);
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 0;
 }
 
-.q-tab-panel {
-    padding: 0 15px !important;
+.config-tabs {
+    padding: 0 20px;
+    background: var(--color-3);
+}
+
+.config-tabs :deep(.q-tab) {
+    min-height: 48px;
+    font-size: 14px;
+    padding: 0 20px;
+}
+
+.platform-config .q-tab-panel {
+    padding: 20px 24px !important;
+}
+
+.config-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.config-section {
+    background: var(--color-3);
+    border-color: var(--color-4) !important;
+    border-radius: 6px;
+}
+
+.config-section :deep(.q-card__section) {
+    padding: 20px 24px;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--color-13);
+}
+
+.ext-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .platform-list .q-item {
-    padding: 10px;
-    margin: 0
+    padding: 12px 14px;
+    margin: 2px 0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.15s;
+}
+
+.platform-list .q-item:hover:not(.platform-active) {
+    background: var(--color-3);
+}
+
+.platform-active {
+    color: var(--color-text-brand) !important;
+    background: var(--q-primary) !important;
+}
+
+.editor-section .editor-tip {
+    padding: 12px 20px !important;
+    background: var(--color-4);
 }
 
 .editor {
     width: 100%;
     min-height: 460px;
-    margin-top: 10px;
 }
 
-.editor-desc{
+.editor-desc {
     display: flex;
-}
-.editor-desc .badge{
-    margin: 0 5px;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-11);
 }
 
-.platform-active {
-    color: var(--color-text-brand) !important;
-    background: var(--q-primary);
+.editor-desc .badge {
+    margin: 0;
 }
 
 :deep(.q-editor__content img) {
     max-width: 200px;
 }
 
-.q-banner {
-    margin-top: 8px;
-    font-size: 12px;
-}
-
 .tag-label-wrapper {
+    min-height: 48px;
     max-height: 200px;
     overflow: auto;
-    border: 1px solid var(--color-3);
-    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-4);
+    border-radius: 6px;
+    background: var(--color-2);
+}
+
+.bottom-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+    margin-top: 4px;
+    border-top: 1px solid var(--color-3);
+}
+
+.empty-state {
+    gap: 16px;
+}
+
+.empty-text {
+    font-size: 15px;
+    color: var(--color-9);
+}
+
+.platform-config.manage-wrapper .q-tab-panel.config-panel {
+    padding: 20px 24px !important;
+}
+
+.platform-config.manage-wrapper .config-section .q-item {
+    padding: 0;
+    margin: 0;
 }

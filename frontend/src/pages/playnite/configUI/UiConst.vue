@@ -113,6 +113,12 @@ export const fontsizeOptions = ['12px', '14px', '16px', '18px', '24px', '28px', 
 
 export const fontFamilyOptions = ref([]);
 
+export const titleBorderTypeOptions = [
+  {label: lang.value.none, value: ''},
+  {label: lang.value.titleBorderShadow, value: 'shadow'},
+  {label: lang.value.titleBorderBorder, value: 'border'},
+];
+
 export const backgroundRepeatOptions = [
   {value: 'cover', label: lang.value.cover},
   {value: 'repeat', label: lang.value.repeat},

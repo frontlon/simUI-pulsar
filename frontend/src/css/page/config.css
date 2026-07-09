@@ -1,0 +1,114 @@
+/* 系统配置页 */
+.system-config.manage-wrapper {
+    max-width: min(960px, 80vw);
+    margin: 0 auto;
+    padding: 0 16px 24px;
+}
+
+.system-config .page-header {
+    padding: 8px 0 16px;
+}
+
+.system-config .page-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.config-content {
+    background: var(--color-2);
+    border: 1px solid var(--color-3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.system-config .config-tabs {
+    padding: 0 20px;
+    background: var(--color-3);
+}
+
+.system-config .config-tabs :deep(.q-tab) {
+    min-height: 48px;
+    font-size: 14px;
+    padding: 0 20px;
+}
+
+.system-config .config-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 24px !important;
+}
+
+.system-config .config-section {
+    background: var(--color-3);
+    border-color: var(--color-4) !important;
+    border-radius: 6px;
+}
+
+.system-config .config-section :deep(.q-card__section) {
+    padding: 20px 24px;
+}
+
+.system-config .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--color-13);
+}
+
+.system-config .bottom-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 8px;
+    margin-top: 4px;
+    border-top: 1px solid var(--color-3);
+}
+
+/* 快捷工具 */
+.shortcut-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shortcut-item {
+    background: var(--color-3);
+    border: 1px solid var(--color-4);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 0;
+}
+
+.shortcut-item :deep(.q-item__section) {
+    padding: 0 8px;
+}
+
+.shortcut-item :deep(.q-item__section:first-child) {
+    padding-left: 0;
+}
+
+.shortcut-empty {
+    padding: 32px;
+    text-align: center;
+    color: var(--color-9);
+    font-size: 14px;
+    border: 1px dashed var(--color-4);
+    border-radius: 6px;
+}
+
+/* 资料枚举 */
+.enum-grid .enum-field :deep(textarea) {
+    min-height: 220px;
+}
+
+.system-config.manage-wrapper .config-section .q-item:not(.shortcut-item) {
+    padding: 0;
+    margin: 0;
+}
+
+.system-config.manage-wrapper .enum-grid .q-item {
+    padding: 0;
+    margin: 0;
+}

@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/csv"
+	"errors"
 	"os"
 	"simUI/db"
 	"simUI/utils"
@@ -52,7 +53,7 @@ func GetRomBase(platform uint32, rebuild bool) (map[string]*RomBase, error) {
 
 	records, err := utils.ReadCsv(platformInfo.RomBaseFile)
 	if err != nil {
-		return RomBaseList[platform], nil //直接返回空，不返回错误
+		return RomBaseList[platform], errors.New("读取游戏资料文件失败") //直接返回空，不返回错误
 	}
 
 	isUtf8 := false

@@ -1,117 +1,139 @@
 <template>
 
-  <div class="manage-wrapper">
-    <div>
-      <q-item style="--wails-draggable:drag">
-        <q-item-section avatar>
-            <q-btn flat size="lg" icon="arrow_back" class="vertical-middle" @click="$router.back()"/>
-        </q-item-section>
-        <q-item-section>
-          <h3>{{lang.systemConfig}}</h3>
-        </q-item-section>
-      </q-item>
+  <div class="manage-wrapper system-config">
+    <q-item class="page-header" style="--wails-draggable:drag">
+      <q-item-section avatar>
+        <q-btn flat size="lg" icon="arrow_back" class="vertical-middle" @click="$router.back()"/>
+      </q-item-section>
+      <q-item-section>
+        <h3>{{ lang.systemConfig }}</h3>
+      </q-item-section>
+    </q-item>
+
+    <div class="config-content">
+      <q-tabs v-model="tab" class="config-tabs text-grey" active-color="primary" indicator-color="primary"
+              align="left">
+        <q-tab name="base" :label="lang.base"/>
+        <q-tab name="shortcut" :label="lang.shortcut"/>
+        <q-tab name="enum" :label="lang.enum"/>
+      </q-tabs>
+
+      <q-separator/>
+      <q-tab-panels v-model="tab" keep-alive animated transition-prev="scale" transition-next="scale">
+        <!-- 基本信息 -->
+        <q-tab-panel name="base" class="config-panel" v-if="config">
+
+          <q-card flat bordered class="config-section">
+            <q-card-section>
+              <div class="section-title">{{ lang.softName }}</div>
+              <div class="row q-col-gutter-md">
+                <div class="col-12 col-sm-6">
+                  <q-input filled square :label="lang.softName" v-model="config.SoftName.Name"/>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <q-input filled square :label="lang.softSubName" v-model="config.SoftName.SubName"/>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <q-input filled square :label="lang.softNameImage" v-model="config.SoftName.Image">
+                    <template v-slot:append>
+                      <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image','SoftNameImage')"/>
+                    </template>
+                  </q-input>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <q-select filled square map-options emit-value :options="boolOptions" :label="lang.softNameHideText"
+                            v-model="config.SoftName.HideText"/>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card flat bordered class="config-section">
+            <q-card-section>
+              <div class="section-title">{{ lang.base }}</div>
+              <div class="row q-col-gutter-md">
+                <div class="col-12 col-sm-6">
+                  <q-select filled square :options="langList" v-model="config.Lang" :label="lang.lang + ' Language'"/>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <q-select filled square map-options emit-value :options="boolOptions" :label="lang.checkUpgrade"
+                            v-model="config.EnableUpgrade"/>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card flat bordered class="config-section">
+            <q-card-section>
+              <div class="section-title">{{ lang.windowZoomDesc }}</div>
+              <div class="row q-col-gutter-md">
+                <div class="col-12 col-sm-4">
+                  <q-select filled square map-options emit-value :options="zoomOptions" :label="lang.windowZoomDesc"
+                            v-model="config.WindowZoom"/>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <q-select filled square map-options emit-value :options="boolOptions" :label="lang.adminRunGame"
+                            v-model="config.AdminRunGame"/>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <q-select filled square map-options emit-value :options="boolOptions" :label="lang.gameMultiOpen"
+                            v-model="config.GameMultiOpen"/>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card flat bordered class="config-section">
+            <q-card-section>
+              <div class="section-title">{{ lang.splashScreenSrc }}</div>
+              <div class="row q-col-gutter-md">
+                <div class="col-12">
+                  <q-input filled square :label="lang.splashScreenSrc" v-model="config.SplashScreen.Src">
+                    <template v-slot:append>
+                      <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image','SplashScreenSrc')"/>
+                    </template>
+                  </q-input>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <q-select filled square map-options emit-value :options="splashScreenSizeOptions"
+                            :label="lang.splashScreenSize" v-model="config.SplashScreen.Size"/>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <q-select filled square map-options emit-value :options="splashScreenTimeOptions"
+                            :label="lang.splashScreenTime" v-model="config.SplashScreen.Time"/>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card flat bordered class="config-section">
+            <q-card-section>
+              <div class="section-title">{{ lang.baiduPicSearch }}</div>
+              <div class="row q-col-gutter-md">
+                <div class="col-12">
+                  <q-input filled square :label="lang.baiduPicSearch" v-model="config.SearchEnginesBaidu"/>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <div class="bottom-bar">
+            <q-btn unelevated :label="lang.update" color="primary" class="update-btn" @click="updateConfig()"/>
+          </div>
+        </q-tab-panel>
+
+        <!-- 快捷工具 -->
+        <q-tab-panel name="shortcut" class="config-panel">
+          <shortcut/>
+        </q-tab-panel>
+
+        <!-- 资料枚举 -->
+        <q-tab-panel name="enum" class="config-panel">
+          <rombase-enum/>
+        </q-tab-panel>
+      </q-tab-panels>
     </div>
-
-    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="justify">
-      <q-tab name="base" :label="lang.base"/>
-      <q-tab name="shortcut" :label="lang.shortcut"/>
-      <q-tab name="enum" :label="lang.enum"/>
-    </q-tabs>
-
-    <q-separator/>
-    <q-tab-panels v-model="tab" keep-alive animated transition-prev="scale"
-                  transition-next="scale">
-      <!-- 基本信息 -->
-      <q-tab-panel name="base" v-if="config">
-
-        <q-list>
-          <q-item>
-            <q-item-section>
-              <q-input filled square dense :label="lang.softName" v-model="config.SoftName.Name"/>
-            </q-item-section>
-            <q-item-section>
-              <q-input filled square dense :label="lang.softSubName" v-model="config.SoftName.SubName"/>
-            </q-item-section>
-            <q-item-section>
-              <q-input filled square dense :label="lang.softNameImage" v-model="config.SoftName.Image">
-                <template v-slot:append>
-                  <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image','SoftNameImage')"/>
-                </template>
-              </q-input>
-            </q-item-section>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="boolOptions" :label="lang.softNameHideText"
-                        v-model="config.SoftName.HideText"/>
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-select filled square dense :options="langList" v-model="config.Lang" :label="lang.lang + ' Language'"/>
-            </q-item-section>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="boolOptions" :label="lang.checkUpgrade"
-                        v-model="config.EnableUpgrade"/>
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="zoomOptions" :label="lang.windowZoomDesc"
-                        v-model="config.WindowZoom">
-              </q-select>
-
-            </q-item-section>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="boolOptions" :label="lang.adminRunGame"
-                        v-model="config.AdminRunGame"/>
-            </q-item-section>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="boolOptions" :label="lang.gameMultiOpen"
-                        v-model="config.GameMultiOpen"/>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <q-input filled square dense :label="lang.splashScreenSrc" v-model="config.SplashScreen.Src">
-                <template v-slot:append>
-                  <q-icon name="upload_file" class="open-dialog" @click="openFileDialog('image','SplashScreenSrc')"/>
-                </template>
-              </q-input>
-            </q-item-section>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="splashScreenSizeOptions" :label="lang.splashScreenSize"
-                        v-model="config.SplashScreen.Size"/>
-            </q-item-section>
-            <q-item-section>
-              <q-select filled square dense map-options emit-value :options="splashScreenTimeOptions" :label="lang.splashScreenTime"
-                        v-model="config.SplashScreen.Time"/>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <q-input filled square dense :label="lang.baiduPicSearch" v-model="config.SearchEnginesBaidu"/>
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <div class="q-gutter-sm bottom-bar">
-          <q-btn flat square :label="lang.update" size="lg" padding="md" color="primary" @click="updateConfig()"/>
-        </div>
-      </q-tab-panel>
-
-      <!-- 快捷工具 -->
-      <q-tab-panel name="shortcut">
-        <shortcut/>
-      </q-tab-panel>
-
-      <!-- 资料枚举 -->
-      <q-tab-panel name="enum">
-        <rombase-enum/>
-      </q-tab-panel>
-    </q-tab-panels>
-
   </div>
-
 
 </template>
 
@@ -122,12 +144,12 @@ import {storeToRefs} from 'pinia';
 import {decodeApiData, notify} from "components/utils";
 import RombaseEnum from 'src/pages/config/RombaseEnum.vue'
 import Shortcut from "pages/config/Shortcut.vue";
-import {GetBaseConfig, OpenFileDialog, UpdateBaseConfig, UpdateShortcut} from 'app/wailsjs/go/controller/Controller'
+import {GetBaseConfig, OpenFileDialog, UpdateBaseConfig} from 'app/wailsjs/go/controller/Controller'
 
 const global = useGlobalStore();
 const tab = ref('base')
 const config = ref(null)
-const {langList,lang} = storeToRefs(global);
+const {langList, lang} = storeToRefs(global);
 
 const boolOptions = [
   {label: '否', value: 0},
@@ -150,60 +172,42 @@ const splashScreenSizeOptions = [
 
 const splashScreenTimeOptions = [
   {label: lang.value.close, value: 0},
-  {label: '1'+lang.value.second, value: 1},
-  {label: '2'+lang.value.second, value: 2},
-  {label: '3'+lang.value.second, value: 3},
-  {label: '4'+lang.value.second, value: 4},
-  {label: '5'+lang.value.second, value: 5},
+  {label: '1' + lang.value.second, value: 1},
+  {label: '2' + lang.value.second, value: 2},
+  {label: '3' + lang.value.second, value: 3},
+  {label: '4' + lang.value.second, value: 4},
+  {label: '5' + lang.value.second, value: 5},
 ]
 
 
-
 onMounted(() => {
-  //加载配置
   GetBaseConfig().then((result: string) => {
     let resp = decodeApiData(result)
     config.value = resp.data;
 
-    if (config.value.WindowZoom == 0){
+    if (config.value.WindowZoom == 0) {
       config.value.WindowZoom = 1
     }
   })
-
 })
 
-//更新系统配置
 function updateConfig() {
-
   UpdateBaseConfig(JSON.stringify(config.value)).then((result: string) => {
     let resp = decodeApiData(result)
     if (resp.err == "") {
       notify("suc", lang.value.updateSuc)
     } else {
-      notify("err",  lang.value.updateFail + ":" + resp.err)
+      notify("err", lang.value.updateFail + ":" + resp.err)
     }
   })
 }
 
-//更新快捷工具
-function updateShortcut() {
-  UpdateShortcut(JSON.stringify(shortcuts.value)).then((result: string) => {
-    let resp = decodeApiData(result)
-    if (resp.err == "") {
-      notify("suc", lang.value.updateSuc)
-    } else {
-      notify("err", lang.value.updateFail +  + resp.err)
-    }
-  })
-}
-
-//选择文件
-function openFileDialog(opt: string,type:string) {
+function openFileDialog(opt: string, type: string) {
   OpenFileDialog(opt).then((result: string) => {
     let resp = decodeApiData(result)
     if (resp.err == "" && resp.data != "") {
 
-      switch (type){
+      switch (type) {
         case "SoftNameImage":
           config.value.SoftName.Image = resp.data;
           break;
@@ -217,13 +221,5 @@ function openFileDialog(opt: string,type:string) {
 </script>
 <style scoped>
 @import "src/css/manage.css";
-
-.base-list-wrapper .q-textarea {
-  margin: 8px 4px;
-}
-
-.base-list-wrapper textarea {
-  height: 300px;
-}
-
+@import "src/css/page/config.css";
 </style>

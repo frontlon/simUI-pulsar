@@ -62,7 +62,7 @@ func CreateRomCache(getPlatform uint32) (string, error) {
 		romlist, err := GetRomData(platform, romMap)
 		if err != nil {
 			utils.WriteLog(err.Error())
-			continue
+			return "", err
 		}
 
 		//第三步：更新rom数据
@@ -78,7 +78,7 @@ func CreateRomCache(getPlatform uint32) (string, error) {
 		updateFilterDB(platform, romlist)
 
 		//第六步：清理rom_config和rom_sub
-		clearRomConfigFile(platform, romlist)
+		//clearRomConfigFile(platform, romlist)
 	}
 
 	//收缩数据库
@@ -215,14 +215,19 @@ func GetRomData(platform uint32, romMap map[string]*db.Rom) ([]*db.Rom, error) {
 	//csv游戏信息
 	BaseInfo, err := config.GetRomBase(platform, true)
 
+	if err != nil {
+		return nil, err
+	}
+
 	//rom配置信息
 	romSetting, err := config.GetRomSettingByPlatform(platform)
-
-	//读取子游戏关系
-	romSubGame, _ := config.GetSubGame(PlatformInfo.Id, false)
-
 	if err != nil {
 		return nil, errors.New(config.Cfg.Lang["csvFormatError"] + err.Error())
+	}
+	//读取子游戏关系（重建缓存时强制从文件加载）
+	romSubGame, err := config.GetSubGame(PlatformInfo.Id, true)
+	if err != nil {
+		return nil, err
 	}
 
 	//进入循环，遍历文件
@@ -307,10 +312,8 @@ func GetRomData(platform uint32, romMap map[string]*db.Rom) ([]*db.Rom, error) {
 			}
 
 			pid := ""
-			if _, ok := romSubGame[romData.RomName]; ok {
-				if _, ok := romMap[romSubGame[romData.RomName]]; ok {
-					pid = romMap[romSubGame[romData.RomName]].RomName
-				}
+			if parentName, ok := romSubGame[romData.RomName]; ok && parentName != "" {
+				pid = parentName
 			}
 
 			rinfo := &db.Rom{
@@ -421,50 +424,59 @@ func ClearPlatform() {
 	if err := (&db.Menu{}).DeleteByNotPlatform(pfs); err != nil {
 		fmt.Println(err)
 	}
-
-	//清空不存在的平台（filter表）
-	if err := (&db.Filter{}).DeleteByNotPlatform(pfs); err != nil {
-		fmt.Println(err)
-	}
-
 }
 
 /**
- * 更新rom cache
+ * 更新rom cache（按 link_file 匹配，避免仅 md5 变化时误删重建导致子游戏绑定丢失）
  **/
 func updateRomDB(platform uint32, romlist []*db.Rom) {
 
-	romlistMd5s := []string{}         //磁盘文件
-	romlistMd5Ids := map[string]int{} //md5关联romId
-	for k, v := range romlist {       //从romlist列表中抽出md5
-		romlistMd5s = append(romlistMd5s, v.InfoMd5)
-		romlistMd5Ids[v.InfoMd5] = k
+	dbRoms, _ := (&db.Rom{}).GetByPlatform(platform)
+	dbByLink := map[string]*db.Rom{}
+	for _, r := range dbRoms {
+		dbByLink[r.LinkFile] = r
 	}
 
-	//数据库中抽出md5
-	DbInfoMd5, _ := (&db.Rom{}).GetIdentByPlatform(platform)
-	addMd5s := utils.SliceDiff(romlistMd5s, DbInfoMd5) //新增的
-	subMd5s := utils.SliceDiff(DbInfoMd5, romlistMd5s) //删除的
+	newLinkFiles := map[string]bool{}
+	var toAdd, toUpdate []*db.Rom
 
-	//分批次批量写入
-	if len(addMd5s) > 0 {
-		addChunks := utils.SliceChunk[string](addMd5s, constant.DB_ADD_MAX_NUM)
-		for _, chunk := range addChunks {
-			addData := []*db.Rom{}
-			for _, md5 := range chunk {
-				addData = append(addData, romlist[romlistMd5Ids[md5]])
+	for _, rom := range romlist {
+		newLinkFiles[rom.LinkFile] = true
+		if old, ok := dbByLink[rom.LinkFile]; ok {
+			if old.InfoMd5 != rom.InfoMd5 || old.Pid != rom.Pid {
+				rom.Id = old.Id
+				toUpdate = append(toUpdate, rom)
 			}
-			fmt.Println("新增了", len(chunk), "条数据")
-			(&db.Rom{}).BatchAdd(addData, 1)
+		} else {
+			toAdd = append(toAdd, rom)
 		}
 	}
 
-	//分批次批量删除
-	if len(subMd5s) > 0 {
-		subChunks := utils.SliceChunk[string](subMd5s, constant.DB_ADD_MAX_NUM)
-		for _, chunk := range subChunks {
+	var deleteIds []uint64
+	for linkFile, old := range dbByLink {
+		if !newLinkFiles[linkFile] {
+			deleteIds = append(deleteIds, old.Id)
+		}
+	}
+
+	if len(toUpdate) > 0 {
+		fmt.Println("更新了", len(toUpdate), "条数据")
+		(&db.Rom{}).BatchUpdateFromCache(toUpdate)
+	}
+
+	if len(toAdd) > 0 {
+		addChunks := utils.SliceChunk[*db.Rom](toAdd, constant.DB_ADD_MAX_NUM)
+		for _, chunk := range addChunks {
+			fmt.Println("新增了", len(chunk), "条数据")
+			(&db.Rom{}).BatchAdd(chunk, 1)
+		}
+	}
+
+	if len(deleteIds) > 0 {
+		deleteChunks := utils.SliceChunk[uint64](deleteIds, constant.DB_ADD_MAX_NUM)
+		for _, chunk := range deleteChunks {
 			fmt.Println(platform, "删除了", len(chunk), "条数据")
-			(&db.Rom{}).DeleteByInfoMd5s(platform, chunk)
+			(&db.Rom{}).DeleteByIds(chunk)
 		}
 	}
 }
@@ -722,16 +734,26 @@ func ClearNotExistGameConfig() error {
 			}
 		}
 
-		//清理子游戏配置
-		subgameMap, err := config.GetSubGame(pf.Id, false)
+		//清理子游戏配置（写回前强制从文件加载，并同时校验子游戏与主游戏是否仍存在）
+		subgameMap, err := config.GetSubGame(pf.Id, true)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 		clearSubgame := false
-		for name, _ := range subgameMap {
-			if _, ok := romMap[name]; !ok {
-				delete(subgameMap, name)
+		for slave, master := range subgameMap {
+			if _, ok := romMap[slave]; !ok {
+				delete(subgameMap, slave)
+				clearSubgame = true
+				continue
+			}
+			if master == "" {
+				delete(subgameMap, slave)
+				clearSubgame = true
+				continue
+			}
+			if _, ok := romMap[master]; !ok {
+				delete(subgameMap, slave)
 				clearSubgame = true
 			}
 		}

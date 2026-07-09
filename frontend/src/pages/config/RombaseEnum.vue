@@ -1,37 +1,36 @@
 <template>
-  <div class="row base-list-wrapper">
-    <q-list>
-      <q-item>
-        <q-item-section>
+  <q-card flat bordered class="config-section">
+    <q-card-section>
+      <div class="section-title">{{ lang.enum }}</div>
+      <div class="row q-col-gutter-md enum-grid">
+        <div class="col-12 col-sm-6 col-lg-3 enum-field">
           <q-input v-model="typeList" square filled type="textarea" :label="lang.baseType"/>
-        </q-item-section>
-        <q-item-section>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 enum-field">
           <q-input v-model="yearList" square filled type="textarea" :label="lang.baseYear"/>
-        </q-item-section>
-        <q-item-section>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 enum-field">
           <q-input v-model="countryList" square filled type="textarea" :label="lang.baseCountry"/>
-        </q-item-section>
-        <q-item-section>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 enum-field">
           <q-input v-model="versionList" square filled type="textarea" :label="lang.baseVersion"/>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4 enum-field">
           <q-input v-model="producerList" square filled type="textarea" :label="lang.baseProducer"/>
-        </q-item-section>
-        <q-item-section>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4 enum-field">
           <q-input v-model="publisherList" square filled type="textarea" :label="lang.basePublisher"/>
-        </q-item-section>
-        <q-item-section>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4 enum-field">
           <q-input v-model="translateList" square filled type="textarea" :label="lang.baseTranslate"/>
-        </q-item-section>
-      </q-item>
-    </q-list>
-  </div>
-  <div class="q-gutter-sm bottom-bar">
-    <q-btn flat square :label="lang.update" size="lg" padding="md" color="primary" @click="updateEnum()"/>
-  </div>
+        </div>
+      </div>
+    </q-card-section>
+  </q-card>
 
+  <div class="bottom-bar">
+    <q-btn unelevated :label="lang.update" color="primary" class="update-btn" @click="updateEnum()"/>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -52,7 +51,6 @@ const translateList = ref("")
 const versionList = ref("")
 
 onMounted(() => {
-  //读取全部枚举
   GetRomBaseEnum().then((result: string) => {
     let resp = decodeApiData(result)
     let data = resp.data
@@ -66,7 +64,6 @@ onMounted(() => {
   })
 })
 
-//更新枚举数据
 function updateEnum() {
   let type = typeList.value.split("\n");
   let year = yearList.value.split("\n");
@@ -76,33 +73,24 @@ function updateEnum() {
   let translate = translateList.value.split("\n");
   let version = versionList.value.split("\n");
 
-  UpdateRomBaseEnumByType("type", JSON.stringify(type)).then((result: string) => {
+  UpdateRomBaseEnumByType("type", JSON.stringify(type)).then(() => {
   })
-  UpdateRomBaseEnumByType("year", JSON.stringify(year)).then((result: string) => {
+  UpdateRomBaseEnumByType("year", JSON.stringify(year)).then(() => {
   })
-  UpdateRomBaseEnumByType("producer", JSON.stringify(producer)).then((result: string) => {
+  UpdateRomBaseEnumByType("producer", JSON.stringify(producer)).then(() => {
   })
-  UpdateRomBaseEnumByType("publisher", JSON.stringify(publisher)).then((result: string) => {
+  UpdateRomBaseEnumByType("publisher", JSON.stringify(publisher)).then(() => {
   })
-  UpdateRomBaseEnumByType("country", JSON.stringify(country)).then((result: string) => {
+  UpdateRomBaseEnumByType("country", JSON.stringify(country)).then(() => {
   })
-  UpdateRomBaseEnumByType("translate", JSON.stringify(translate)).then((result: string) => {
+  UpdateRomBaseEnumByType("translate", JSON.stringify(translate)).then(() => {
   })
-  UpdateRomBaseEnumByType("version", JSON.stringify(version)).then((result: string) => {
+  UpdateRomBaseEnumByType("version", JSON.stringify(version)).then(() => {
   })
   notify("suc", lang.value.updateSuc)
 }
 
 </script>
 <style scoped>
-@import "src/css/manage.css";
-
-.base-list-wrapper .q-textarea {
-  margin: 8px 4px;
-}
-
-.base-list-wrapper textarea {
-  height: 300px;
-}
-
+@import "src/css/page/config.css";
 </style>

@@ -71,8 +71,8 @@ func (m *Rom) ConvertRomListSimple(lists []*Rom, showSubGame uint8) []*RomSimple
 
 	for _, v := range lists {
 		s := []*Rom{}
-		if _, ok := subRoms[v.LinkFile]; ok {
-			s = subRoms[v.LinkFile]
+		if _, ok := subRoms[v.RomName]; ok {
+			s = subRoms[v.RomName]
 		}
 		result = append(result, m.ConvertRomSimple(v, s))
 	}
